@@ -74,10 +74,9 @@ public class ListSE {
             head = newNode;
 
         } else {
-            for (int i = 0; i < pos - 1 && temp.getNext() != null; i++) {
+            for (int i = 0; temp.getNext() != null && i < pos - 1; i++) {
                 temp = temp.getNext();
             }
-
             newNode.setNext(temp.getNext());
             temp.setNext(newNode);
         }
@@ -141,13 +140,36 @@ public class ListSE {
         int sum = 0;
         ListSE listSE1 = new ListSE();
         if (head != null) {
-            while (temp != null && !temp.getData().getIdentification().equals(id)) {
-                listSE1.add(temp.getData());
-                temp = temp.getNext();
+            while (temp != null  ) {
+                if (!temp.getData().getIdentification().equals(id)) {
+                    listSE1.add(temp.getData());
+                    temp = temp.getNext();
+                } else {
+                    temp = temp.getNext();
+                }
             }
         }
         sum = lose + getPosById(id);
-        listSE1.addInPos(getKidById(id), sum);
+        listSE1.addInPosForLose(getKidById(id), sum);
+        this.head = listSE1.getHead();
+    }
+    public void addInPosForLose(Kid kid, int pos2) {
+        Node  temp = head;
+        Node newNode = new Node(kid);
+        int listLength = getLength();
+        if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the kid in the last position
+            add(kid);
+        if (pos2 == 0) {
+            newNode.setNext(head);//to actualize the head
+            head = newNode;
+
+        } else {
+            for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
+                temp = temp.getNext();
+            }
+            newNode.setNext(temp.getNext());
+            temp.setNext(newNode);
+        }
     }
 
     //method to get the pos of the data by an id-----------------------------------------------------------------------
@@ -170,19 +192,15 @@ public class ListSE {
     public Kid getKidById(String id) {
         Node temp = head;
         if (head != null) {
-                if (temp.getData().getIdentification().equals(id)) {
-                    temp.getData();
-                } else {
-                    while (temp != null) {
+            while (temp != null && !temp.getData().getIdentification().equals(id)) {
                 temp = temp.getNext();
             }
-            }
-
         }
         Kid kid = new Kid(temp.getData().getIdentification(), temp.getData().getName(),
                 temp.getData().getAge(), temp.getData().getGender());
         return kid;
     }
+
 
     //method to get the length of the list-------------------------------------------------------
     public int getLength() {
