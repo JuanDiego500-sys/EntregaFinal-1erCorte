@@ -1,5 +1,6 @@
 package co.edu.umanizales.tads;
 
+import co.edu.umanizales.tads.model.ListSE;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
