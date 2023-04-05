@@ -2,10 +2,16 @@ package co.edu.umanizales.tads.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
 public class ListSE {
     private Node head;
     private int size;
+    private ArrayList<String> listCity = new ArrayList<String>();
+
 
     /*
     Algoritmo de adicionar al final
@@ -145,7 +151,7 @@ public class ListSE {
         int sum = 0;
         ListSE listSE1 = new ListSE();
         if (head != null) {
-            while (temp != null  ) {
+            while (temp != null) {
                 if (!temp.getData().getIdentification().equals(id)) {
                     listSE1.add(temp.getData());
                     temp = temp.getNext();
@@ -158,9 +164,10 @@ public class ListSE {
         listSE1.addInPosValidations(getKidById(id), sum);
         this.head = listSE1.getHead();
     }
+
     //method to add in pos when you need validations--------------------------------------------------------------------
     public void addInPosValidations(Kid kid, int pos2) {
-        Node  temp = head;
+        Node temp = head;
         Node newNode = new Node(kid);
         int listLength = getLength();
         if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the kid in the last position
@@ -203,7 +210,7 @@ public class ListSE {
             }
         }
         Kid kid = new Kid(temp.getData().getIdentification(), temp.getData().getName(),
-                temp.getData().getAge(), temp.getData().getGender());
+                temp.getData().getAge(), temp.getData().getGender(), temp.getData().getCity());
         return kid;
     }
 
@@ -218,11 +225,12 @@ public class ListSE {
         }
         return total;
     }
+
     //method to exchange the extremes of the list, the head to the last and vice versa--------------
-    public void exchangeExtremes(){
-        if ( this. head != null && this.head.getNext() != null){
+    public void exchangeExtremes() {
+        if (this.head != null && this.head.getNext() != null) {
             Node temp = this.head;
-            while (temp.getNext() != null){
+            while (temp.getNext() != null) {
                 temp = temp.getNext();
             }//temp is in the last data
             Kid copy = this.head.getData();//creation of a copy
@@ -232,55 +240,59 @@ public class ListSE {
         }
 
     }
+
     //method to invert the list se-----------------------------------------------------------------------------
-    public void invertList(){
+    public void invertList() {
         Node temp = this.head;
         ListSE listSE2 = new ListSE();
-        if(this.head != null){
-            while (temp !=null){
+        if (this.head != null) {
+            while (temp != null) {
                 listSE2.addToStart(temp.getData());
                 temp = temp.getNext();
             }
-            this.head= listSE2.getHead();
+            this.head = listSE2.getHead();
         }
     }
+
     //method to put the kids at the beginning and the girls at the end------------------------------------------
-    public void putKidsToBeginning(){
+    public void putKidsToBeginning() {
         Node temp = this.head;
         ListSE listSE1 = new ListSE();
-        if(this.head != null){
-            while (temp !=null){
-                if (temp.getData().getGender() == 'M'){
+        if (this.head != null) {
+            while (temp != null) {
+                if (temp.getData().getGender() == 'M') {
                     listSE1.addToStart(temp.getData());
 
-                }else if(temp.getData().getGender() == 'F'){
+                } else if (temp.getData().getGender() == 'F') {
                     listSE1.add(temp.getData());
                 }
-                temp=temp.getNext();
+                temp = temp.getNext();
             }
             this.head = listSE1.getHead();
         }
     }
+
     //method to delete a kid with a specified age-----------------------------------------------
-    public void deleteByAge(byte age){
+    public void deleteByAge(byte age) {
         Node temp = this.head;
         ListSE listSE1 = new ListSE();
-        if (this.head != null){
-            while (temp != null){
-                if (temp.getData().getAge() != age){
+        if (this.head != null) {
+            while (temp != null) {
+                if (temp.getData().getAge() != age) {
                     listSE1.addToStart(temp.getData());
                 }
-                temp= temp.getNext();
+                temp = temp.getNext();
             }
-            this.head= listSE1.getHead();
+            this.head = listSE1.getHead();
         }
     }
+
     //method to get the average age of the kids-----------------------------------------------
-    public double getAverageAge(){
+    public double getAverageAge() {
         double averageAge = 0;
         Node temp = this.head;
-        if (this.head != null){
-            while (temp != null){
+        if (this.head != null) {
+            while (temp != null) {
                 averageAge = averageAge + temp.getData().getAge();
                 temp = temp.getNext();
             }
@@ -289,13 +301,14 @@ public class ListSE {
         }
         return averageAge;
     }
+
     //method to earn positions------------------------------------------------
     public void earnPositions(String id, int earn) {
         Node temp = head;
         int sum = 0;
         ListSE listSE1 = new ListSE();
         if (head != null) {
-            while (temp != null  ) {
+            while (temp != null) {
                 if (!temp.getData().getIdentification().equals(id)) {
                     listSE1.add(temp.getData());
                     temp = temp.getNext();
@@ -304,12 +317,86 @@ public class ListSE {
                 }
             }
         }
-        sum = earn - getPosById(id);
+        sum = getPosById(id) - earn;
         listSE1.addInPosValidations(getKidById(id), sum);
         this.head = listSE1.getHead();
     }
 
+    //method to send the kids with a specifically character in its name------------------------
+    public void sendKidsToEndByChar(char user) {
+        ListSE listSE1 = new ListSE();
+        Node temp = this.head;
+        if (this.head != null) {
+            while (temp != null) {
+                if (temp.getData().getName().charAt(0) != user) {
+                    listSE1.addToStart(temp.getData());
+                } else {
+                    listSE1.add(temp.getData());
+                }
+                temp = temp.getNext();
+            }
+        }
+        this.head = listSE1.getHead();
+    }
 
 
-}//end of list se---------------------------------------------------------------------------------
+    //method to create a report of each kid for each city
+    public Map<String, Integer> reportByCity() {
+        Map<String, Integer> report = new HashMap<>();
+        Node temp = head;
+        while (temp != null) {
+            String city = temp.getData().getCity().toLowerCase();
+            if (report.containsKey(city)) {
+                int quantity = report.get(city);
+                report.put(city, quantity + 1);
+            } else {
+                report.put(city, 1);
+            }
+            temp = temp.getNext();
+        }
+        return report;
+    }
+
+    //method to generate a report of how much kids are in each range of ages
+    public String generateReportByAge() {
+        int quantity1 = 0;
+        int quantity2 = 0;
+        int quantity3 = 0;
+        int quantity4 = 0;
+        int quantity5 = 0;
+        Node temp = this.head;
+        if (this.head != null) {
+            while (temp != null) {
+                if (temp.getData().getAge() >= 0 && temp.getData().getAge() <= 3) {
+                    quantity1++;
+                } else if (temp.getData().getAge() > 3 && temp.getData().getAge() <= 6) {
+                    quantity2++;
+                } else if (temp.getData().getAge() > 6 && temp.getData().getAge() <= 9) {
+                    quantity3++;
+                } else if (temp.getData().getAge() > 9 && temp.getData().getAge() <= 12) {
+                    quantity4++;
+                } else if (temp.getData().getAge() > 12 && temp.getData().getAge() <= 15) {
+                    quantity5++;
+                }
+                temp = temp.getNext();
+            }
+
+
+        }
+
+        return " niños entre 0-3 años:" + quantity1 +
+                " niños entre 4-6 años:" + quantity2 +
+                " niños entre 7-9 años:" + quantity3 +
+                " niños entre 10-12 años:" + quantity4 +
+                " niños entre 13-15 años:" + quantity5;
+    }
+}//end of list se-------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 

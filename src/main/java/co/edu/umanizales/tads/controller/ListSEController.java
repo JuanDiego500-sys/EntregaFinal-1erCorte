@@ -6,10 +6,9 @@ import co.edu.umanizales.tads.service.ListSEService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/listse")
@@ -40,13 +39,6 @@ public class ListSEController {
                 200, "Niños ordenados", null), HttpStatus.OK);
     }
 
-    //to lose positions in the list se----------------------------------------------------------
-    @GetMapping(path = "/losePositions/{id}")
-    public ResponseEntity<ResponseDTO> losePositions(@PathVariable String id, int lose) {
-        listSEService.losePositions(id, lose);
-        return new ResponseEntity<>(new ResponseDTO(
-                200, "Niño agregado en posicion decidida", null), HttpStatus.OK);
-    }
     //to exchange the edges of the list----------------------------------------------------------
     @GetMapping(path = "/exchange_list_se")
     public ResponseEntity<ResponseDTO> exchangeExtremes() {
@@ -81,5 +73,49 @@ public class ListSEController {
         return new ResponseEntity<>(new ResponseDTO(
                 200, "el promedio de edad de los niños es: "+ listSEService.getAverageAge() , null), HttpStatus.OK);
     }
+    //method to send the kids to the end by a char-------------------------------------------------------
+    @PostMapping(path = "/send_kids_to_end_by_char")
+    public ResponseEntity<ResponseDTO> sendKidsToEndByChar(@RequestBody Map<String, Object> requestData) {
+        String userString = (String) requestData.get("user");
+        char user = userString.toLowerCase().charAt(0);
+        listSEService.sendKidsToEndByChar(user);
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "ordenados" , null), HttpStatus.OK);
+    }
+    //method to lose positions-------------------------------------------------------------------------
+    @PostMapping(path = "/lose_positions")
+    public ResponseEntity<ResponseDTO> losePositions(@RequestBody Map<String, Object> requestBody) {
+        String id = (String) requestBody.get("id");
+        Integer lose = (Integer) requestBody.get("lose");
+        listSEService.losePositions(id,lose);
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "posiciones re ordenadas", null), HttpStatus.OK);
+    }
+    //method to earn positions-----------------------------------------------------------------------
+    @PostMapping(path = "/earn_positions")
+    public ResponseEntity<ResponseDTO> earnPositions(@RequestBody Map<String, Object> requestBody) {
+        String id = (String) requestBody.get("id");
+        Integer earn = (Integer) requestBody.get("earn");
+        listSEService.earnPositions(id, earn);
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "posiciones re ordenadas", null), HttpStatus.OK);
+    }
+    //method to create a report of each kid by city------------------------------------------------
+    @GetMapping(path = "/count_kid_by_city")
+    public ResponseEntity<ResponseDTO> reportByCity() {
+        Map<String, Integer> report = listSEService.reportByCity();
+        return new ResponseEntity<>(new ResponseDTO(200, report , null), HttpStatus.OK);
+    }
+    //method to create a report about the range of age of the list se
+    @GetMapping(path = "/generate_report_by_age")
+    public ResponseEntity<ResponseDTO>  generateReportByAge(){
+        return new ResponseEntity<>(new ResponseDTO(200, listSEService.generateReportByAge(), null), HttpStatus.OK);
+    }
+
+
+
+
+
 
 }//end of list se controller-----------------------------------------------------------------------------------
+        
