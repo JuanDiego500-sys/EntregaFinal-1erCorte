@@ -10,4 +10,5 @@ public class Node {
     public Node(Kid data) {
         this.data = data;
     }
+
 }

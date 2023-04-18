@@ -1,5 +1,6 @@
 package co.edu.umanizales.tads.model;
 
+import co.edu.umanizales.tads.controller.dto.KidDTO;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,23 +13,6 @@ public class ListSE {
     private int size;
     private ArrayList<String> listCity = new ArrayList<String>();
 
-
-    /*
-    Algoritmo de adicionar al final
-    Entrada
-        un niño
-    si hay datos
-    si
-        llamo a un ayudante y le digo que se posicione en la cabeza
-        mientras en el brazo exista algo
-            pasese al siguiente
-        va estar ubicado en el ùltimo
-
-        meto al niño en un costal (nuevo costal)
-        y le digo al ultimo que tome el nuevo costal
-    no
-        metemos el niño en el costal y ese costal es la cabeza
-     */
     public void add(Kid kid) {
         if (head != null) {
             Node temp = head;
@@ -42,17 +26,8 @@ public class ListSE {
             head = new Node(kid);
         }
         size++;
-    }
+    }//end of add to end----------------------------------------------------------------
 
-    /* Adicionar al inicio
-    si hay datos
-    si
-        meto al niño en un costal (nuevocostal)
-        le digo a nuevo costal que tome con su brazo a la cabeza
-        cabeza es igual a nuevo costal
-    no
-        meto el niño en un costal y lo asigno a la cabez
-     */
     public void addToStart(Kid kid) {
         if (head != null) {
             Node newNode = new Node(kid);
@@ -210,7 +185,7 @@ public class ListSE {
             }
         }
         Kid kid = new Kid(temp.getData().getIdentification(), temp.getData().getName(),
-                temp.getData().getAge(), temp.getData().getGender(), temp.getData().getCity());
+                temp.getData().getAge(), temp.getData().getGender(), temp.getData().getLocation());
         return kid;
     }
 
@@ -341,7 +316,7 @@ public class ListSE {
 
 
     //method to create a report of each kid for each city
-    public Map<String, Integer> reportByCity() {
+     /* public Map<String, Integer> reportByCity() {
         Map<String, Integer> report = new HashMap<>();
         Node temp = head;
         while (temp != null) {
@@ -355,7 +330,7 @@ public class ListSE {
             temp = temp.getNext();
         }
         return report;
-    }
+    }*/
 
     //method to generate a report of how much kids are in each range of ages
     public String generateReportByAge() {
@@ -389,6 +364,33 @@ public class ListSE {
                 " niños entre 7-9 años:" + quantity3 +
                 " niños entre 10-12 años:" + quantity4 +
                 " niños entre 13-15 años:" + quantity5;
+    }
+    //method to count the kids by location--------------------------------------------------------------------------
+    public int getCountKidsByLocationCode(String code){
+        int count =0;
+        if( this.head!=null){
+            Node temp = this.head;
+            while(temp != null){
+                if(temp.getData().getLocation().getCode().equals(code)){
+                    count++;
+                }
+                temp = temp.getNext();
+            }
+        }
+        return count;
+    }
+    //method to verify the id to dont add kids with the same id-----------------------------------------------------
+    public int verifyId(KidDTO kid) {
+        Node temp = this.head;
+        boolean found = false;
+        while (temp != null) {
+            if (temp.getData().getIdentification().equals(kid.getIdentification())) {
+                found = true;
+                break;
+            }
+            temp = temp.getNext();
+        }
+        return found ? 1 : 0;
     }
 }//end of list se-------------------------------------------------------------------------------------------------
 

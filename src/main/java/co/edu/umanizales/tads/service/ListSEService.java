@@ -1,5 +1,6 @@
 package co.edu.umanizales.tads.service;
 
+import co.edu.umanizales.tads.controller.dto.KidDTO;
 import co.edu.umanizales.tads.model.Kid;
 import co.edu.umanizales.tads.model.ListSE;
 import co.edu.umanizales.tads.model.Node;
@@ -15,12 +16,6 @@ public class ListSEService {
     //constructor methods-------------------------------------------------------------------
     public ListSEService() {
         kids = new ListSE();
-        kids.add(new Kid("1","juan",(byte)13,'M',"Manizales"));
-        kids.add(new Kid("2","ana",(byte)1,'F',"bogota"));
-        kids.add(new Kid("3","juana",(byte)2,'F',"bogota"));
-        kids.add(new Kid("4","carlos",(byte)7,'M',"Armenia"));
-        kids.add(new Kid("5","mariana",(byte)9,'F',"pereira"));
-        kids.addInPos(new Kid("7","andres",(byte)15,'M',"manizales"),3);
     }
     //all the calls of the methods------------------------------------------------------------
     public void deleteKid(String id){
@@ -44,13 +39,19 @@ public class ListSEService {
     {
         return kids.getHead();
     }
+    public void add(Kid kid){kids.add(kid);}
     public void sendKidsToEndByChar(char user){kids.sendKidsToEndByChar(user);}
     public double getAverageAge(){return kids.getAverageAge();}
-    public Map<String, Integer> reportByCity(){
+    /*public Map<String, Integer> reportByCity(){
         return kids.reportByCity();
 
-    }
+    }*/
     public String generateReportByAge(){
         return kids.generateReportByAge();
     }
+    public int getCountKidsByLocationCode(String code){
+        return kids.getCountKidsByLocationCode(code);
+    }
+    public int getCountKidsByDepartment(String departmentCode){return getCountKidsByDepartment(departmentCode);}
+    public int verifyId(KidDTO kid){return kids.verifyId(kid);}
 }
