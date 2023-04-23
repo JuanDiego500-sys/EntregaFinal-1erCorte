@@ -146,8 +146,10 @@ public class ListSEController {
         List<KidsByLocationDTO> kidsByLocationDTOList = new ArrayList<>();
         for(Location loc: locationService.getLocations()){
             int count = listSEService.getCountKidsByLocationCode(loc.getCode());
+            int male = listSEService.getCountKidsByLocationCodeAndMale(loc.getCode());
+            int female = listSEService.getCountKidsByLocationCodeAndFemale(loc.getCode());
             if(count>0){
-                kidsByLocationDTOList.add(new KidsByLocationDTO(loc,count));
+                kidsByLocationDTOList.add(new KidsByLocationDTO(loc,female,male,count));
             }
         }
         return new ResponseEntity<>(new ResponseDTO(
@@ -159,8 +161,10 @@ public class ListSEController {
         List<KidsByLocationDTO> kidsByLocationDTOList = new ArrayList<>();
         for(Location loc: locationService.getLocationsByCodeSize(5)){
             int count = listSEService.getCountKidsByLocationCode(loc.getCode());
+            int male = listSEService.getCountKidsByLocationCodeAndMale(loc.getCode());
+            int female = listSEService.getCountKidsByLocationCodeAndFemale(loc.getCode());
             if(count>0){
-                kidsByLocationDTOList.add(new KidsByLocationDTO(loc,count));
+                kidsByLocationDTOList.add(new KidsByLocationDTO(loc,female,male,count));
             }
         }
         return new ResponseEntity<>(new ResponseDTO(
@@ -172,14 +176,21 @@ public class ListSEController {
         List<KidsByLocationDTO> kidsByLocationDTOList = new ArrayList<>();
         for(Location loc: locationService.getLocationsByCodeSize(8)){
             int count = listSEService.getCountKidsByLocationCode(loc.getCode());
+            int male = listSEService.getCountKidsByLocationCodeAndMale(loc.getCode());
+            int female = listSEService.getCountKidsByLocationCodeAndFemale(loc.getCode());
             if(count>0){
-                kidsByLocationDTOList.add(new KidsByLocationDTO(loc,count));
+                kidsByLocationDTOList.add(new KidsByLocationDTO(loc,female,male,count));
             }
         }
         return new ResponseEntity<>(new ResponseDTO(
                 200,kidsByLocationDTOList,
                 null), HttpStatus.OK);
     }
+
+
+
+
+
 
 
 

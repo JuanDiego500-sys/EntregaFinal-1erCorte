@@ -52,6 +52,8 @@ public class ListSEService {
     public int getCountKidsByLocationCode(String code){
         return kids.getCountKidsByLocationCode(code);
     }
-    public int getCountKidsByDepartment(String departmentCode){return getCountKidsByDepartment(departmentCode);}
     public int verifyId(KidDTO kid){return kids.verifyId(kid);}
+    public int getCountKidsByLocationCodeAndMale(String code){return kids.getCountKidsByLocationCodeAndMale(code);}
+    public int getCountKidsByLocationCodeAndFemale(String code){return kids.getCountKidsByLocationCodeAndFemale(code);}
+
 }

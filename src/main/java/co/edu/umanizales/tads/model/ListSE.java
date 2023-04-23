@@ -4,8 +4,6 @@ import co.edu.umanizales.tads.controller.dto.KidDTO;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 public class ListSE {
@@ -379,7 +377,7 @@ public class ListSE {
         }
         return count;
     }
-    //method to verify the id to dont add kids with the same id-----------------------------------------------------
+    //method to verify the id to don't add kids with the same id-----------------------------------------------------
     public int verifyId(KidDTO kid) {
         Node temp = this.head;
         boolean found = false;
@@ -392,6 +390,33 @@ public class ListSE {
         }
         return found ? 1 : 0;
     }
+    public int getCountKidsByLocationCodeAndMale(String code){
+        int male =0;
+        if( this.head!=null){
+            Node temp = this.head;
+            while(temp != null){
+                if(temp.getData().getLocation().getCode().equals(code)&&temp.getData().getGender() == 'M'){
+                    male++;
+                }
+                temp = temp.getNext();
+            }
+        }
+        return male;
+    }
+    public int getCountKidsByLocationCodeAndFemale(String code){
+        int female =0;
+        if( this.head!=null){
+            Node temp = this.head;
+            while(temp != null){
+                if(temp.getData().getLocation().getCode().equals(code)&&temp.getData().getGender() == 'F'){
+                    female++;
+                }
+                temp = temp.getNext();
+            }
+        }
+        return female;
+    }
+
 }//end of list se-------------------------------------------------------------------------------------------------
 
 
