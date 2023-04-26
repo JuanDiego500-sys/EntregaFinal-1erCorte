@@ -89,6 +89,54 @@ public class ListDE {
         }
         size++;
     }
+    public void orderByGender() {
+        ListDE listDE1 = new ListDE();
+
+        int sum = 0;
+        NodeDE temp = head;
+        NodeDE empt = head;
+        if (head == null) {
+            System.out.println("Lo siento, no hay datos");
+        } else {
+            while (temp != null) {
+                if (temp.getData().getGender() == 'F') {
+                    listDE1.addPetToBeginning(temp.getData());
+
+                }
+                temp = temp.getNext();
+            }while (empt !=null){
+                if (empt.getData().getGender() == 'F'){
+                    listDE1.addPetToBeginning(empt.getData());
+                }
+                empt = empt.getPrevious();
+            }
+            temp = head;
+            empt = head;
+            while (temp != null) {
+                if (temp.getData().getGender() == 'M') {
+                    listDE1.addInPos(temp.getData(), sum);
+                    temp = temp.getNext();
+                    sum = sum + 2;
+                } else {
+                    temp = temp.getNext();
+
+                }
+
+            }sum =0;
+            while (empt!=null){
+                if (empt.getData().getGender() == 'M'){
+                    listDE1.addInPos(empt.getData(),sum);
+                    empt = empt.getPrevious();
+                    sum = sum + 2;
+                }else{
+                    empt = empt.getPrevious();
+                }
+            }
+            this.head = listDE1.getHead();
+        }
+    }
+
+
     public int getCounPetsByLocationCode(String code){
         int count =0;
         if( this.head!=null){

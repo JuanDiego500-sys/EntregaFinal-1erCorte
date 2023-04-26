@@ -3,6 +3,7 @@ package co.edu.umanizales.tads.controller;
 import co.edu.umanizales.tads.controller.dto.PetByLocationDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
 import co.edu.umanizales.tads.model.Location;
+import co.edu.umanizales.tads.model.Pet;
 import co.edu.umanizales.tads.service.ListDEService;
 import co.edu.umanizales.tads.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,13 @@ public class ListDEController {
     @GetMapping(path = "/delete_pet/{id}")
     public ResponseEntity<ResponseDTO> deletePet(@PathVariable String name) {
         listDEService.deletePet(name);
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "Mascota eliminado", null), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/add_pet_to_beginning")
+    public ResponseEntity<ResponseDTO> addPetToBeginning(Pet pet) {
+        listDEService.addPetToBeginning(pet);
         return new ResponseEntity<>(new ResponseDTO(
                 200, "Mascota eliminado", null), HttpStatus.OK);
     }
