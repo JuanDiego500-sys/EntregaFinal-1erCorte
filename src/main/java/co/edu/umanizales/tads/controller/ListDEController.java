@@ -23,6 +23,19 @@ public class ListDEController {
     private ListDEService listDEService;
     @Autowired
     private LocationService locationService;
+
+    @GetMapping(path = "/get_list")
+    public ResponseEntity<ResponseDTO> getPets() {
+        return new ResponseEntity<>(new ResponseDTO(
+                200, listDEService.getPets(), null), HttpStatus.OK);
+    }
+    @GetMapping(path = "/delete_pet/{id}")
+    public ResponseEntity<ResponseDTO> deletePet(@PathVariable String name) {
+        listDEService.deletePet(name);
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "Mascota eliminado", null), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/pets_by_locations/{age}")
     public ResponseEntity<ResponseDTO> getKidsByLocation(@PathVariable byte age){
         List<PetByLocationDTO> petByLocationDTOS = new ArrayList<>();

@@ -25,14 +25,14 @@ public class ListSEController {
     private LocationService locationService;
 
     //to get all the list se--------------------------------------------------------------------
-    @GetMapping(path = "/getList")
+    @GetMapping(path = "/get_list")
     public ResponseEntity<ResponseDTO> getKids() {
         return new ResponseEntity<>(new ResponseDTO(
                 200, listSEService.getKids(), null), HttpStatus.OK);
     }
 
     //to delete a kid with the id---------------------------------------------------------------
-    @GetMapping(path = "/deleteKid/{id}")
+    @GetMapping(path = "/delete_kid/{id}")
     public ResponseEntity<ResponseDTO> deleteKid(@PathVariable String id) {
         listSEService.deleteKid(id);
         return new ResponseEntity<>(new ResponseDTO(
