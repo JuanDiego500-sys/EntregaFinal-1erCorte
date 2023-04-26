@@ -39,17 +39,17 @@ public class ListDE {
         size++;
     }
 
-    public void deletePet(String name) {
+    public void deletePet(String phone) {
         NodeDE empt = null;
         NodeDE temp = this.head;
         NodeDE tempDE = this.head;
         NodeDE emptDE = null;
 
-        while (temp != null && !temp.getData().getName().equals(name)) {
+        while (temp != null && !temp.getData().getName().equals(phone)) {
             empt = temp;
             temp = temp.getNext();
         }
-        while (tempDE != null && !temp.getData().getName().equals(name)) {
+        while (tempDE != null && !temp.getData().getName().equals(phone)) {
             emptDE = tempDE;
             tempDE = temp.getPrevious();
         }
@@ -195,6 +195,76 @@ public class ListDE {
         }
         return female;
     }
+    public void losePositions(String phone, int lose) {
+        NodeDE temp = head;
+        int sum = 0;
+        ListDE listDE1 = new ListDE();
+        if (head != null) {
+            while (temp != null) {
+                if (!temp.getData().getName().equals(phone)) {
+                    listDE1.addPet(temp.getData());
+                    temp = temp.getNext();
+                } else {
+                    temp = temp.getNext();
+                }
+            }
+        }
+        sum = lose + getPosByPhone(phone);
+        listDE1.addInPosValidations(getKidById(phone), sum);
+        this.head = listDE1.getHead();
+    }
+    public int getPosByPhone(String phone) {
+        NodeDE temp = this.head;
+        int acum = 0;
+        if (head != null) {
+            while (temp != null){
+                temp = temp.getPrevious();
+            }
+            while (temp != null && !temp.getData().getOwnerPhone().equals(phone)) {
+                acum = acum + 1;
+                temp = temp.getNext();
+
+            }
+        }
+        return acum;
+    }
+    public void addInPosValidations(Pet pet, int pos2) {
+        NodeDE temp = head;
+        NodeDE newNode = new NodeDE(pet);
+
+        if (pos2 < 0 || pos2 >= size)//to do a validation and add the kid in the last position
+            addPet(pet);
+        if (pos2 == 0) {
+            newNode.setNext(head);//to actualize the head
+            head = newNode;
+
+        } else {
+            while (temp!=null){
+                temp = temp.getPrevious();
+            }
+            for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
+                temp = temp.getNext();
+            }
+            newNode.setNext(temp.getNext());
+            temp.setNext(newNode);
+        }
+    }
+
+    public Pet getKidById(String phone) {
+        NodeDE temp = head;
+        if (head != null) {
+            while (temp!=null){
+                temp= temp.getPrevious();
+            }
+            while (temp != null && !temp.getData().getOwnerPhone().equals(phone)) {
+                temp = temp.getNext();
+            }
+        }
+        Pet pet = new Pet(temp.getData().getAge(), temp.getData().getName(),
+                temp.getData().getType(), temp.getData().getRace(), temp.getData().getLocation(),temp.getData().getGender(), temp.getData().getOwnerPhone());
+        return pet;
+    }
+
 
 
 

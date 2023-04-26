@@ -118,6 +118,8 @@ public class ListSE {
     }
 
     //method to lose positions-------------------------------------------------------------------------------------
+
+
     public void losePositions(String id, int lose) {
         Node temp = head;
         int sum = 0;

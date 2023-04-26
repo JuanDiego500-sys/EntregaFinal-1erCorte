@@ -12,4 +12,5 @@ public class Pet {
     private String race;
     private Location location;
     private char gender;
+    private String ownerPhone;
 }//end of pet------------------------------------------

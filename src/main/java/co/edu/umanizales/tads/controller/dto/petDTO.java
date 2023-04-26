@@ -8,4 +8,5 @@ public class petDTO {
     private String race;
     private String codeLocation;
     private char gender;
+    private  String ownerPhone;
 }//end of the petDTO------------------------------------
