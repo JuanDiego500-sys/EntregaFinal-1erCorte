@@ -1,6 +1,4 @@
 package co.edu.umanizales.tads.controller.dto;
-
-import co.edu.umanizales.tads.model.Location;
 import lombok.Data;
 
 @Data

@@ -59,7 +59,6 @@ public class ListSE {
             for (int i = 0; temp.getNext() != null && i < pos - 1; i++) {
                 temp = temp.getNext();
             }
-            newNode.setNext(temp.getNext());
             temp.setNext(newNode);
         }
         size++;

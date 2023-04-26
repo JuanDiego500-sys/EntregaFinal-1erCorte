@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class ListDEService {
 
     private ListDE pets;
-    private int size;
 
     public ListDEService() {
         pets = new ListDE();
@@ -20,6 +19,9 @@ public class ListDEService {
     public NodeDE getPets(){return pets.getHead();
     }
     public void addPet(Pet pet){pets.addPet(pet);}
+    public int getCounPetsByLocationCode(String code){return pets.getCounPetsByLocationCode(code);}
+    public int getCountPetsByLocationCodeAndMale(String code){return pets.getCountPetsByLocationCodeAndMale(code);}
+    public int getCountPetsByLocationCodeAndFemale(String code){return pets.getCountPetsByLocationCodeAndFemale(code);}
 
 
 }//end of listDE service--------------------------------------------
