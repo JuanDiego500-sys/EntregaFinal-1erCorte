@@ -1,6 +1,7 @@
 package co.edu.umanizales.tads.model;
 
 import co.edu.umanizales.tads.controller.dto.KidDTO;
+import exception.ListSEException;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -11,19 +12,28 @@ public class ListSE {
     private int size;
     private ArrayList<String> listCity = new ArrayList<String>();
 
-    public void add(Kid kid) {
-        if (head != null) {
+    public void add(Kid kid) throws ListSEException {
+        if(head != null){
             Node temp = head;
-            while (temp.getNext() != null) {
+            while(temp.getNext() !=null)
+            {
+                if(temp.getData().getIdentification().equals(kid.getIdentification())){
+                    throw new ListSEException("Ya existe un niño");
+                }
                 temp = temp.getNext();
+
+            }
+            if(temp.getData().getIdentification().equals(kid.getIdentification())){
+                throw new ListSEException("Ya existe un niño");
             }
             /// Parado en el último
             Node newNode = new Node(kid);
             temp.setNext(newNode);
-        } else {
+        }
+        else {
             head = new Node(kid);
         }
-        size++;
+        size ++;
     }//end of add to end----------------------------------------------------------------
 
     public void addToStart(Kid kid) {
@@ -45,7 +55,7 @@ public class ListSE {
         3)When it finds the pos , add the kid in that space.
          */
     //method to add a new node and kid in the pos that the user says---------------------
-    public void addInPos(Kid kid, int pos) {
+    public void addInPos(Kid kid, int pos) throws ListSEException {
         Node temp = head;
         Node newNode = new Node(kid);
         int listLength = getLength();
@@ -87,7 +97,7 @@ public class ListSE {
     }
 
     //method to order by gender-------------------------------------------------------------------------------------
-    public void orderByGender() {
+    public void orderByGender() throws ListSEException {
         ListSE listSE1 = new ListSE();
 
         int sum = 0;
@@ -120,7 +130,7 @@ public class ListSE {
     //method to lose positions-------------------------------------------------------------------------------------
 
 
-    public void losePositions(String id, int lose) {
+    public void losePositions(String id, int lose) throws ListSEException {
         Node temp = head;
         int sum = 0;
         ListSE listSE1 = new ListSE();
@@ -140,7 +150,7 @@ public class ListSE {
     }
 
     //method to add in pos when you need validations--------------------------------------------------------------------
-    public void addInPosValidations(Kid kid, int pos2) {
+    public void addInPosValidations(Kid kid, int pos2) throws ListSEException {
         Node temp = head;
         Node newNode = new Node(kid);
         int listLength = getLength();
@@ -229,7 +239,7 @@ public class ListSE {
     }
 
     //method to put the kids at the beginning and the girls at the end------------------------------------------
-    public void putKidsToBeginning() {
+    public void putKidsToBeginning() throws ListSEException {
         Node temp = this.head;
         ListSE listSE1 = new ListSE();
         if (this.head != null) {
@@ -277,7 +287,7 @@ public class ListSE {
     }
 
     //method to earn positions------------------------------------------------
-    public void earnPositions(String id, int earn) {
+    public void earnPositions(String id, int earn) throws ListSEException {
         Node temp = head;
         int sum = 0;
         ListSE listSE1 = new ListSE();
@@ -297,7 +307,7 @@ public class ListSE {
     }
 
     //method to send the kids with a specifically character in its name------------------------
-    public void sendKidsToEndByChar(char user) {
+    public void sendKidsToEndByChar(char user) throws ListSEException {
         ListSE listSE1 = new ListSE();
         Node temp = this.head;
         if (this.head != null) {

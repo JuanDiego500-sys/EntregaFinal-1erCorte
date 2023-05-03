@@ -25,6 +25,18 @@ public class ListDEService {
     public int getCounPetsByLocationCode(String code){return pets.getCounPetsByLocationCode(code);}
     public int getCountPetsByLocationCodeAndMale(String code){return pets.getCountPetsByLocationCodeAndMale(code);}
     public int getCountPetsByLocationCodeAndFemale(String code){return pets.getCountPetsByLocationCodeAndFemale(code);}
+    public void orderByGender(){pets.orderByGender();}
+    public void losePositions(String phone,int lose){pets.losePositions(phone,lose);}
+    public void exchangeExtremes(){pets.exchangeExtremes();}
+    public void  invertList(){pets.invertList();}
+    public void putPetsMaleToBeginning(){pets.putPetsToBeginning();}
+    public void deleteByAge(byte age){pets.deleteByAge(age);}
+    public double getAverageAge(){return pets.getAverageAge();}
+    public void earnPositions(String phone, int earn){pets.earnPositions(phone,earn);}
+    public void sendPetsToEndByChar(char user){pets.sendPetsToEndByChar(user);}
+    public String generateReportByAge(){return pets.generateReportByAge();}
+
+
 
 
 }//end of listDE service--------------------------------------------

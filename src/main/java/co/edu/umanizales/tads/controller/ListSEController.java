@@ -7,6 +7,7 @@ import co.edu.umanizales.tads.model.Kid;
 import co.edu.umanizales.tads.model.Location;
 import co.edu.umanizales.tads.service.ListSEService;
 import co.edu.umanizales.tads.service.LocationService;
+import exception.ListSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class ListSEController {
 
     //to order the list by gender---------------------------------------------------------------
     @GetMapping(path = "/orderByGender")
-    public ResponseEntity<ResponseDTO> orderByGender() {
+    public ResponseEntity<ResponseDTO> orderByGender() throws ListSEException{
         listSEService.orderByGender();
         return new ResponseEntity<>(new ResponseDTO(
                 200, "Niños ordenados", null), HttpStatus.OK);
@@ -63,7 +64,7 @@ public class ListSEController {
     }
     //method to put the kids to the beginning and the girls to the end--------------------------------
     @GetMapping(path = "/kids_to_beginning")
-    public ResponseEntity<ResponseDTO> putKidsToBeginning() {
+    public ResponseEntity<ResponseDTO> putKidsToBeginning() throws ListSEException{
         listSEService.putKidsToBeginning();
         return new ResponseEntity<>(new ResponseDTO(
                 200, "niños agregados al inicio y niñas agregadas al final", null), HttpStatus.OK);
@@ -83,7 +84,7 @@ public class ListSEController {
     }
     //method to send the kids to the end by a char-------------------------------------------------------
     @PostMapping(path = "/send_kids_to_end_by_char")
-    public ResponseEntity<ResponseDTO> sendKidsToEndByChar(@RequestBody Map<String, Object> requestData) {
+    public ResponseEntity<ResponseDTO> sendKidsToEndByChar(@RequestBody Map<String, Object> requestData)throws ListSEException{
         String userString = (String) requestData.get("user");
         char user = userString.toLowerCase().charAt(0);
         listSEService.sendKidsToEndByChar(user);
@@ -92,7 +93,7 @@ public class ListSEController {
     }
     //method to lose positions-------------------------------------------------------------------------
     @PostMapping(path = "/lose_positions")
-    public ResponseEntity<ResponseDTO> losePositions(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<ResponseDTO> losePositions(@RequestBody Map<String, Object> requestBody) throws ListSEException {
         String id = (String) requestBody.get("id");
         Integer lose = (Integer) requestBody.get("lose");
         listSEService.losePositions(id,lose);
@@ -101,7 +102,7 @@ public class ListSEController {
     }
     //method to earn positions-----------------------------------------------------------------------
     @PostMapping(path = "/earn_positions")
-    public ResponseEntity<ResponseDTO> earnPositions(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<ResponseDTO> earnPositions(@RequestBody Map<String, Object> requestBody)throws ListSEException {
         String id = (String) requestBody.get("id");
         Integer earn = (Integer) requestBody.get("earn");
         listSEService.earnPositions(id, earn);
@@ -120,7 +121,7 @@ public class ListSEController {
         return new ResponseEntity<>(new ResponseDTO(200, listSEService.generateReportByAge(), null), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<ResponseDTO> addKid(@RequestBody KidDTO kidDTO){
+    public ResponseEntity<ResponseDTO> addKid(@RequestBody KidDTO kidDTO) throws ListSEException {
         Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
         if (listSEService.verifyId(kidDTO)==0) {
             if (location == null) {
