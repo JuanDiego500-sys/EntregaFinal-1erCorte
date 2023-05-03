@@ -347,7 +347,21 @@ public class ListDE {
         }
         return found ? 1 : 0;
     }
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        NodeDE temp = this.head;
+        sb.append("[");
+        while (temp != null){
+            sb.append(temp.getData().toString());
+            temp = temp.getNext();
+            if (temp != null){
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
 
+    }
 
 
 

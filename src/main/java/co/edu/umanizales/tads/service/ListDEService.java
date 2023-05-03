@@ -18,6 +18,7 @@ public class ListDEService {
 
     public NodeDE getPets(){return pets.getHead();
     }
+    public String putToString(){return pets.toString();}
     public void addPet(Pet pet){pets.addPet(pet);}
     public void addPetToBeginning(Pet pet){ pets.addPetToBeginning(pet);}
     public void deletePet(String name){pets.deletePet(name);}

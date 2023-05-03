@@ -26,7 +26,7 @@ public class ListDEController {
     @GetMapping(path = "/get_list")
     public ResponseEntity<ResponseDTO> getPets() {
         return new ResponseEntity<>(new ResponseDTO(
-                200, listDEService.getPets(), null), HttpStatus.OK);
+                200, listDEService.putToString(), null), HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<ResponseDTO> addPet(@RequestBody PetDTO petDTO )  {
