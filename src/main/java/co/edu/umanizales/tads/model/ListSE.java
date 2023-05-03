@@ -1,7 +1,7 @@
 package co.edu.umanizales.tads.model;
 
 import co.edu.umanizales.tads.controller.dto.KidDTO;
-import exception.ListSEException;
+import co.edu.umanizales.tads.exception.ListSEException;
 import lombok.Data;
 
 import java.util.ArrayList;
