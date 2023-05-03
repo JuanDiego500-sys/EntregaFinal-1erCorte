@@ -1,5 +1,5 @@
 package co.edu.umanizales.tads.service;
-
+import co.edu.umanizales.tads.controller.dto.PetDTO;
 import co.edu.umanizales.tads.model.ListDE;
 import co.edu.umanizales.tads.model.NodeDE;
 import co.edu.umanizales.tads.model.Pet;
@@ -35,6 +35,7 @@ public class ListDEService {
     public void earnPositions(String phone, int earn){pets.earnPositions(phone,earn);}
     public void sendPetsToEndByChar(char user){pets.sendPetsToEndByChar(user);}
     public String generateReportByAge(){return pets.generateReportByAge();}
+    public int verifyPhone(PetDTO petDTO){return pets.verifyPhone(petDTO);}
 
 
 

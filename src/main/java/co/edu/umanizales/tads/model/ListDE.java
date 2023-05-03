@@ -1,5 +1,7 @@
 package co.edu.umanizales.tads.model;
 
+import co.edu.umanizales.tads.controller.dto.KidDTO;
+import co.edu.umanizales.tads.controller.dto.PetDTO;
 import lombok.Data;
 
 @Data
@@ -24,15 +26,11 @@ public class ListDE {
     }
 
     public void addPetToBeginning(Pet pet) {
+        NodeDE newNode = new NodeDE(pet);
         if (this.head != null) {
-            NodeDE temp = this.head;
-            NodeDE newNode = new NodeDE(pet);
-            temp.setPrevious(newNode);
-            temp.setNext(newNode);
-            this.head = newNode;
-        } else {
-            this.head = new NodeDE(pet);
+          this.head.setPrevious(newNode);
         }
+        this.head = newNode;
         size++;
     }
     public void deletePet(String phone) {
@@ -52,6 +50,8 @@ public class ListDE {
             head = temp.getNext();
         } else {
             empt.setNext(temp.getNext());
+        }if (temp.getNext() !=null){
+            temp.getNext().setPrevious(empt);
         }
         size--;
     }
@@ -64,13 +64,19 @@ public class ListDE {
         if (pos2 == 0) {
             addPetToBeginning(pet);
 
-        } else {
+        }
             for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
                 temp = temp.getNext();
             }
             newNode.setNext(temp.getNext());
             temp.setNext(newNode);
-        }
+
+            if (newNode.getNext() !=null){
+                newNode.getNext().setPrevious(newNode);
+            }
+            newNode.setPrevious(temp);
+            size++;
+
     }
 
     public int getCounPetsByLocationCode(String code){
@@ -114,7 +120,7 @@ public class ListDE {
         return female;
     }
     //from here,  I have to review all the next methods , and prove each one--------------------------------------------
-    public void orderByGender() {
+    public void orderByGender()  {
         ListDE listDE1 = new ListDE();
         int sum = 0;
         NodeDE temp = head;
@@ -156,7 +162,7 @@ public class ListDE {
             }
         }
         sum = lose + getPosByPhone(phone);
-        listDE1.addInPosValidations(getKidById(phone), sum);
+        listDE1.addInPos(getKidById(phone), sum);
         this.head = listDE1.getHead();
     }
     public int getPosByPhone(String phone) {
@@ -170,27 +176,6 @@ public class ListDE {
             }
         }
         return acum;
-    }
-    public void addInPosValidations(Pet pet, int pos2) {
-        NodeDE temp = head;
-        NodeDE newNode = new NodeDE(pet);
-
-        if (pos2 < 0 || pos2 >= size)//to do a validation and add the kid in the last position
-            addPet(pet);
-        if (pos2 == 0) {
-            newNode.setNext(head);//to actualize the head
-            head = newNode;
-
-        } else {
-            while (temp!=null){
-                temp = temp.getPrevious();
-            }
-            for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
-                temp = temp.getNext();
-            }
-            newNode.setNext(temp.getNext());
-            temp.setNext(newNode);
-        }
     }
 
     public Pet getKidById(String phone) {
@@ -244,7 +229,7 @@ public class ListDE {
                     listDE1.addPetToBeginning(temp.getData());
 
                 } else if (temp.getData().getGender() == 'F') {
-                    listDE1.addPetToBeginning(temp.getData());
+                    listDE1.addPet(temp.getData());
                 }
                 temp = temp.getNext();
             }
@@ -252,7 +237,7 @@ public class ListDE {
         }
     }
 
-    //method to delete a kid with a specified age-----------------------------------------------
+    //method to delete a pet with a specified age-----------------------------------------------
     public void deleteByAge(byte age) {
         NodeDE temp = this.head;
         ListDE listDE1 = new ListDE();
@@ -267,7 +252,7 @@ public class ListDE {
         }
     }
 
-    //method to get the average age of the kids-----------------------------------------------
+    //method to get the average age of the pets-----------------------------------------------
     public double getAverageAge() {
         double averageAge = 0;
         NodeDE temp = this.head;
@@ -298,7 +283,7 @@ public class ListDE {
             }
         }
         sum = getPosByPhone(phone) - earn;
-        listDE1.addInPosValidations(getKidById(phone), sum);
+        listDE1.addInPos(getKidById(phone), sum);
         this.head = listDE1.getHead();
     }
 
@@ -349,6 +334,18 @@ public class ListDE {
                 " niños entre 7-9 años:" + quantity3 +
                 " niños entre 10-12 años:" + quantity4 +
                 " niños entre 13-15 años:" + quantity5;
+    }
+    public int verifyPhone(PetDTO petDTO) {
+        NodeDE temp = this.head;
+        boolean found = false;
+        while (temp != null) {
+            if (temp.getData().getOwnerPhone().equals(petDTO.getOwnerPhone())) {
+                found = true;
+                break;
+            }
+            temp = temp.getNext();
+        }
+        return found ? 1 : 0;
     }
 
 

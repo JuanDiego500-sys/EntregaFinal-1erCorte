@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import co.edu.umanizales.tads.controller.dto.PetDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +28,27 @@ public class ListDEController {
         return new ResponseEntity<>(new ResponseDTO(
                 200, listDEService.getPets(), null), HttpStatus.OK);
     }
+    @PostMapping
+    public ResponseEntity<ResponseDTO> addPet(@RequestBody PetDTO petDTO )  {
+        Location location = locationService.getLocationByCode(petDTO.getCodeLocation());
+        if (listDEService.verifyPhone(petDTO)==0) {
+            if (location == null) {
+                return new ResponseEntity<>(new ResponseDTO(
+                        404, "La ubicación no existe",
+                        null), HttpStatus.OK);
+            }
+            listDEService.addPet(
+                    new Pet(petDTO.getAge(),
+                            petDTO.getName(), petDTO.getType(), petDTO.getRace(),
+                            location, petDTO.getGender(), petDTO.getOwnerPhone()));
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "Se ha adicionado el petacón",
+                    null), HttpStatus.OK);
+        } else  {
+            return new ResponseEntity<>(new ResponseDTO(400,"ya existe ese numero de telefono de la mascota",
+                    null),HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping(path = "/delete_pet/{id}")
     public ResponseEntity<ResponseDTO> deletePet(@PathVariable String name) {
         listDEService.deletePet(name);
@@ -35,8 +56,8 @@ public class ListDEController {
                 200, "Mascota eliminada", null), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/add_pet_to_beginning")
-    public ResponseEntity<ResponseDTO> addPetToBeginning(Pet pet) {
+    @PostMapping(path = "/add_pet_to_beginning")
+    public ResponseEntity<ResponseDTO> addPetToBeginning(@RequestBody Pet pet) {
         listDEService.addPetToBeginning(pet);
         return new ResponseEntity<>(new ResponseDTO(
                 200, "Mascota agregada al inicio", null), HttpStatus.OK);
