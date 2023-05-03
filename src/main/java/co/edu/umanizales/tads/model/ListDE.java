@@ -235,7 +235,7 @@ public class ListDE {
             this.head = listDE2.getHead();
         }
     }
-    public void putKidsToBeginning() {
+    public void putPetsToBeginning() {
         NodeDE temp = this.head;
         ListDE listDE1 = new ListDE();
         if (this.head != null) {
@@ -303,7 +303,7 @@ public class ListDE {
     }
 
     //method to send the kids with a specifically character in its name------------------------
-    public void sendKidsToEndByChar(char user) {
+    public void sendPetsToEndByChar(char user) {
         ListDE listDE1 = new ListDE();
         NodeDE temp = this.head;
         if (this.head != null) {
@@ -318,26 +318,6 @@ public class ListDE {
         }
         this.head = listDE1.getHead();
     }
-
-
-    //method to create a report of each kid for each city
-     /* public Map<String, Integer> reportByCity() {
-        Map<String, Integer> report = new HashMap<>();
-        Node temp = head;
-        while (temp != null) {
-            String city = temp.getData().getCity().toLowerCase();
-            if (report.containsKey(city)) {
-                int quantity = report.get(city);
-                report.put(city, quantity + 1);
-            } else {
-                report.put(city, 1);
-            }
-            temp = temp.getNext();
-        }
-        return report;
-    }*/
-
-    //method to generate a report of how much kids are in each range of ages
     public String generateReportByAge() {
         int quantity1 = 0;
         int quantity2 = 0;
