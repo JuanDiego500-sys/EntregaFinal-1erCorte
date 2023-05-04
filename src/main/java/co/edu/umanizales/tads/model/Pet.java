@@ -32,7 +32,7 @@ public class Pet {
     private Location location;
     @NotBlank
     @NotEmpty
-    private Gender gender;
+    private char gender;
     @Size(min = 6, max =15 )
     @NotEmpty
     @NotBlank
