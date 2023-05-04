@@ -22,9 +22,10 @@ public class Kid {
     @Max(14)
     @NotNull
     private byte age;
-    @javax.validation.constraints.Pattern(regexp = "^[MF]$",message = "El género debe ser 'M' o 'F'")
+    @Pattern(regexp = "^[MF]$",message = "El género debe ser 'M' o 'F'")
     private char gender;
     @Valid
+    @NotNull
     private Location location;
 
 }

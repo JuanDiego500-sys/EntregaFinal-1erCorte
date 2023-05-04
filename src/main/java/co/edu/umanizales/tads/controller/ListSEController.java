@@ -12,6 +12,8 @@ import co.edu.umanizales.tads.exception.ListSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -117,7 +119,7 @@ public class ListSEController {
         return new ResponseEntity<>(new ResponseDTO(200, listSEService.generateReportByAge(), null), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<ResponseDTO> addKid(@Valid @RequestBody KidDTO kidDTO) {
+    public ResponseEntity<ResponseDTO> addKid(@Valid @RequestBody KidDTO kidDTO) throws ListSEException {
         try {
             Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
             if (listSEService.verifyId(kidDTO) == 0) {
@@ -134,14 +136,15 @@ public class ListSEController {
                         200, "Se ha adicionado el petacón",
                         null), HttpStatus.OK);
             }
-
-        } catch (ListSEException e) {
-            ErrorDTO errorDTO = new ErrorDTO(400,"Validation error");
-            List<ErrorDTO>errorDTOS = new ArrayList<>();
-            errorDTOS.add(errorDTO);
-            return new ResponseEntity<>(new ResponseDTO(400, e.getMessage(), errorDTOS), HttpStatus.BAD_REQUEST);
+        } catch (ListSEException ex) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    409, ex.getMessage(), null), HttpStatus.CONFLICT);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    500, "Ha ocurrido un error inesperado", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(new ResponseDTO(500, "Ha ocurrido un error inesperado", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ResponseDTO(
+                500, "Ha ocurrido un error inesperado", null), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
