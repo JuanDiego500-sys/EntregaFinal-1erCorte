@@ -59,7 +59,7 @@ public class ListDE {
         NodeDE temp = head;
         NodeDE newNode = new NodeDE(pet);
 
-        if (pos2 < 0 || pos2 >= size)//to do a validation and add the kid in the last position
+        if (pos2 >= size)//to do a validation and add the kid in the last position
             addPet(pet);
         if (pos2 == 0) {
             addPetToBeginning(pet);
@@ -162,7 +162,7 @@ public class ListDE {
             }
         }
         sum = lose + getPosByPhone(phone);
-        listDE1.addInPos(getKidById(phone), sum);
+        listDE1.addInPos(getPetByPhone(phone), sum);
         this.head = listDE1.getHead();
     }
     public int getPosByPhone(String phone) {
@@ -178,7 +178,7 @@ public class ListDE {
         return acum;
     }
 
-    public Pet getKidById(String phone) {
+    public Pet getPetByPhone(String phone) {
         NodeDE temp = head;
         if (head != null) {
             while (temp!=null){
@@ -283,7 +283,7 @@ public class ListDE {
             }
         }
         sum = getPosByPhone(phone) - earn;
-        listDE1.addInPos(getKidById(phone), sum);
+        listDE1.addInPos(getPetByPhone(phone), sum);
         this.head = listDE1.getHead();
     }
 

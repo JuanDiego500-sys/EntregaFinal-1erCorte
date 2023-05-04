@@ -322,25 +322,6 @@ public class ListSE {
         }
         this.head = listSE1.getHead();
     }
-
-
-    //method to create a report of each kid for each city
-     /* public Map<String, Integer> reportByCity() {
-        Map<String, Integer> report = new HashMap<>();
-        Node temp = head;
-        while (temp != null) {
-            String city = temp.getData().getCity().toLowerCase();
-            if (report.containsKey(city)) {
-                int quantity = report.get(city);
-                report.put(city, quantity + 1);
-            } else {
-                report.put(city, 1);
-            }
-            temp = temp.getNext();
-        }
-        return report;
-    }*/
-
     //method to generate a report of how much kids are in each range of ages
     public String generateReportByAge() {
         int quantity1 = 0;

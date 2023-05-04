@@ -1,5 +1,6 @@
 package co.edu.umanizales.tads.controller;
 
+import co.edu.umanizales.tads.controller.dto.ErrorDTO;
 import co.edu.umanizales.tads.controller.dto.KidDTO;
 import co.edu.umanizales.tads.controller.dto.KidsByLocationDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -109,38 +111,39 @@ public class ListSEController {
         return new ResponseEntity<>(new ResponseDTO(
                 200, "posiciones re ordenadas", null), HttpStatus.OK);
     }
-    //method to create a report of each kid by city------------------------------------------------
-    /*@GetMapping(path = "/count_kid_by_city")
-    public ResponseEntity<ResponseDTO> reportByCity() {
-        Map<String, Integer> report = listSEService.reportByCity();
-        return new ResponseEntity<>(new ResponseDTO(200, report , null), HttpStatus.OK);
-    }*/
-    //method to create a report about the range of age of the list se
+
     @GetMapping(path = "/generate_report_by_age")
     public ResponseEntity<ResponseDTO>  generateReportByAge(){
         return new ResponseEntity<>(new ResponseDTO(200, listSEService.generateReportByAge(), null), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<ResponseDTO> addKid(@RequestBody KidDTO kidDTO) throws ListSEException {
-        Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
-        if (listSEService.verifyId(kidDTO)==0) {
-            if (location == null) {
+    public ResponseEntity<ResponseDTO> addKid(@Valid @RequestBody KidDTO kidDTO) {
+        try {
+            Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
+            if (listSEService.verifyId(kidDTO) == 0) {
+                if (location == null) {
+                    return new ResponseEntity<>(new ResponseDTO(
+                            404, "La ubicación no existe",
+                            null), HttpStatus.OK);
+                }
+                listSEService.add(
+                        new Kid(kidDTO.getIdentification(),
+                                kidDTO.getName(), kidDTO.getAge(),
+                                kidDTO.getGender(), location));
                 return new ResponseEntity<>(new ResponseDTO(
-                        404, "La ubicación no existe",
+                        200, "Se ha adicionado el petacón",
                         null), HttpStatus.OK);
             }
-            listSEService.add(
-                    new Kid(kidDTO.getIdentification(),
-                            kidDTO.getName(), kidDTO.getAge(),
-                            kidDTO.getGender(), location));
-            return new ResponseEntity<>(new ResponseDTO(
-                    200, "Se ha adicionado el petacón",
-                    null), HttpStatus.OK);
-        } else  {
-            return new ResponseEntity<>(new ResponseDTO(400,"ya existe ese id",
-                    null),HttpStatus.BAD_REQUEST);
+
+        } catch (ListSEException e) {
+            ErrorDTO errorDTO = new ErrorDTO(400,"Validation error");
+            List<ErrorDTO>errorDTOS = new ArrayList<>();
+            errorDTOS.add(errorDTO);
+            return new ResponseEntity<>(new ResponseDTO(400, e.getMessage(), errorDTOS), HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(new ResponseDTO(500, "Ha ocurrido un error inesperado", null), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
     @GetMapping(path = "/kidsbylocations/{age}")
     public ResponseEntity<ResponseDTO> getKidsByLocation(@PathVariable byte age){

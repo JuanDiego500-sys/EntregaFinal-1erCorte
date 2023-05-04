@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import co.edu.umanizales.tads.controller.dto.PetDTO;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +32,7 @@ public class ListDEController {
                 200, listDEService.putToString(), null), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<ResponseDTO> addPet(@RequestBody PetDTO petDTO )  {
+    public ResponseEntity<ResponseDTO> addPet(@Valid @RequestBody PetDTO petDTO )  {
         Location location = locationService.getLocationByCode(petDTO.getCodeLocation());
         if (listDEService.verifyPhone(petDTO)==0) {
             if (location == null) {
@@ -57,13 +60,13 @@ public class ListDEController {
     }
 
     @PostMapping(path = "/add_pet_to_beginning")
-    public ResponseEntity<ResponseDTO> addPetToBeginning(@RequestBody Pet pet) {
+    public ResponseEntity<ResponseDTO> addPetToBeginning(@Valid @RequestBody Pet pet) {
         listDEService.addPetToBeginning(pet);
         return new ResponseEntity<>(new ResponseDTO(
                 200, "Mascota agregada al inicio", null), HttpStatus.OK);
     }
     @GetMapping(path = "/add_pet_in_pos/{pos}")
-    public ResponseEntity<ResponseDTO> addPetInPos(Pet pet,@PathVariable int pos) {
+    public ResponseEntity<ResponseDTO> addPetInPos(@Valid Pet pet,@Min (0)@PathVariable int pos) {
         listDEService.addInPos(pet,pos);
         return new ResponseEntity<>(new ResponseDTO(
                 200, "Mascota agregada en posición", null), HttpStatus.OK);
