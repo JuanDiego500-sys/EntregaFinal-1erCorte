@@ -1,7 +1,12 @@
 package co.edu.umanizales.tads.exception;
 
-public class ListSEException extends Exception{
-    public ListSEException(String message){
+import lombok.Data;
+
+@Data
+public class ListSEException extends RuntimeException{
+    private String code;
+    public ListSEException(String code,String message){
         super(message);
+        this.code = code;
     }
 }

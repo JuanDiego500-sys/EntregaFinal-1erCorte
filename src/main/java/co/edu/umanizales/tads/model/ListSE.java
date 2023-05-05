@@ -18,15 +18,15 @@ public class ListSE {
             while(temp.getNext() !=null)
             {
                 if(temp.getData().getIdentification().equals(kid.getIdentification())){
-                    throw new ListSEException("Ya existe un niño");
+                    throw new ListSEException("400","Ya existe un niño con ese codigo");
                 }
                 temp = temp.getNext();
 
             }
             if(temp.getData().getIdentification().equals(kid.getIdentification())){
-                throw new ListSEException("Ya existe un niño");
+                    throw new ListSEException("400","Ya existe un niño con ese codigo");
             }
-            /// Parado en el último
+
             Node newNode = new Node(kid);
             temp.setNext(newNode);
         }

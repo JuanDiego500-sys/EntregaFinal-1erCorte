@@ -4,6 +4,7 @@ import co.edu.umanizales.tads.controller.dto.ErrorDTO;
 import co.edu.umanizales.tads.controller.dto.KidDTO;
 import co.edu.umanizales.tads.controller.dto.KidsByLocationDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
+import co.edu.umanizales.tads.exception.RequestException;
 import co.edu.umanizales.tads.model.Kid;
 import co.edu.umanizales.tads.model.Location;
 import co.edu.umanizales.tads.service.ListSEService;
@@ -120,7 +121,8 @@ public class ListSEController {
     }
     @PostMapping
     public ResponseEntity<ResponseDTO> addKid(@Valid @RequestBody KidDTO kidDTO) throws ListSEException {
-        try {
+
+        try{
             Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
             if (listSEService.verifyId(kidDTO) == 0) {
                 if (location == null) {
@@ -136,15 +138,16 @@ public class ListSEController {
                         200, "Se ha adicionado el petacón",
                         null), HttpStatus.OK);
             }
-        } catch (ListSEException ex) {
-            return new ResponseEntity<>(new ResponseDTO(
-                    409, ex.getMessage(), null), HttpStatus.CONFLICT);
-        } catch (Exception ex) {
-            return new ResponseEntity<>(new ResponseDTO(
-                    500, "Ha ocurrido un error inesperado", null), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(new ResponseDTO(
-                500, "Ha ocurrido un error inesperado", null), HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch (ListSEException e){
+
+            throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
+
+            }
+        List<ErrorDTO> errorDTOS = new ArrayList<>();
+        ErrorDTO errorDTO = new ErrorDTO(Integer.parseInt("400"),"debe poner un id distinto");
+        errorDTOS.add(errorDTO);
+        return new ResponseEntity<>(new ResponseDTO(400,"Ya existe un niño con ese id",errorDTOS),HttpStatus.BAD_REQUEST);
+
     }
 
 

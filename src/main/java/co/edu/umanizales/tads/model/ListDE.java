@@ -13,7 +13,7 @@ public class ListDE {
         if (this.head != null) {
             NodeDE temp = this.head;
             while (temp.getNext() != null) {
-                temp.getNext();
+                temp = temp.getNext();
 
             }
             NodeDE newNode = new NodeDE(pet);

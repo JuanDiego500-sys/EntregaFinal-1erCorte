@@ -2,6 +2,7 @@ package co.edu.umanizales.tads.controller;
 
 import co.edu.umanizales.tads.controller.dto.PetByLocationDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
+import co.edu.umanizales.tads.exception.RequestException;
 import co.edu.umanizales.tads.model.Location;
 import co.edu.umanizales.tads.model.Pet;
 import co.edu.umanizales.tads.service.ListDEService;
@@ -48,9 +49,10 @@ public class ListDEController {
                     200, "Se ha adicionado el petacón",
                     null), HttpStatus.OK);
         } else  {
-            return new ResponseEntity<>(new ResponseDTO(400,"ya existe ese numero de telefono de la mascota",
-                    null),HttpStatus.BAD_REQUEST);
+            throw new RequestException("400","Ese telefono ya existe",HttpStatus.BAD_REQUEST);
+
         }
+
     }
     @GetMapping(path = "/delete_pet/{id}")
     public ResponseEntity<ResponseDTO> deletePet(@PathVariable String name) {
