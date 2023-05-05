@@ -13,8 +13,6 @@ import co.edu.umanizales.tads.exception.ListSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -120,9 +118,9 @@ public class ListSEController {
         return new ResponseEntity<>(new ResponseDTO(200, listSEService.generateReportByAge(), null), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<ResponseDTO> addKid(@Valid @RequestBody KidDTO kidDTO) throws ListSEException {
+    public ResponseEntity<ResponseDTO> addKid( @RequestBody @Valid KidDTO kidDTO) throws ListSEException {
 
-        try{
+        try {
             Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
             if (listSEService.verifyId(kidDTO) == 0) {
                 if (location == null) {
@@ -138,16 +136,13 @@ public class ListSEController {
                         200, "Se ha adicionado el petacón",
                         null), HttpStatus.OK);
             }
-            }catch (ListSEException e){
+        } catch (ListSEException e) {
 
-            throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
-
-            }
+        }
         List<ErrorDTO> errorDTOS = new ArrayList<>();
-        ErrorDTO errorDTO = new ErrorDTO(Integer.parseInt("400"),"debe poner un id distinto");
+        ErrorDTO errorDTO = new ErrorDTO(Integer.parseInt("400"), "debe poner un id distinto");
         errorDTOS.add(errorDTO);
-        return new ResponseEntity<>(new ResponseDTO(400,"Ya existe un niño con ese id",errorDTOS),HttpStatus.BAD_REQUEST);
-
+        return new ResponseEntity<>(new ResponseDTO(400, "Ya existe un niño con ese id", errorDTOS), HttpStatus.BAD_REQUEST);
     }
 
 
