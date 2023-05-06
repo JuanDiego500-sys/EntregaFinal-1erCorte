@@ -4,7 +4,6 @@ import co.edu.umanizales.tads.controller.dto.ErrorDTO;
 import co.edu.umanizales.tads.controller.dto.KidDTO;
 import co.edu.umanizales.tads.controller.dto.KidsByLocationDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
-import co.edu.umanizales.tads.exception.RequestException;
 import co.edu.umanizales.tads.model.Kid;
 import co.edu.umanizales.tads.model.Location;
 import co.edu.umanizales.tads.service.ListSEService;
@@ -143,6 +142,7 @@ public class ListSEController {
         ErrorDTO errorDTO = new ErrorDTO(Integer.parseInt("400"), "debe poner un id distinto");
         errorDTOS.add(errorDTO);
         return new ResponseEntity<>(new ResponseDTO(400, "Ya existe un niño con ese id", errorDTOS), HttpStatus.BAD_REQUEST);
+
     }
 
 
