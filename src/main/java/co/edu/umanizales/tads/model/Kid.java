@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
 public class Kid {
 
     @NotBlank
-    @Size(max = 15,min = 1,message = "digite maximo 15  y minimo 1")
+    @Size(max = 15,min = 1,message = "digite maximo 15 caracteres  y minimo 1 caracter")
     @NotNull(message = "debe llenar este campo")
     private String identification;
     @NotBlank

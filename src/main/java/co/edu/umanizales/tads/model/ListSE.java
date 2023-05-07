@@ -38,7 +38,7 @@ public class ListSE {
         size ++;
     }//end of add to end----------------------------------------------------------------
 
-    public void addToStart(Kid kid) {
+    public void addToStart(Kid kid){
             if (head != null) {
                 Node newNode = new Node(kid);
                 newNode.setNext(head);

@@ -1,7 +1,8 @@
 package co.edu.umanizales.tads.model;
 
-import co.edu.umanizales.tads.controller.dto.KidDTO;
 import co.edu.umanizales.tads.controller.dto.PetDTO;
+import co.edu.umanizales.tads.exception.ListDEException;
+import co.edu.umanizales.tads.exception.ListSEException;
 import lombok.Data;
 
 @Data
@@ -9,12 +10,17 @@ public class ListDE {
     private NodeDE head;
     private int size;
 
-    public void addPet(Pet pet) {
+    public void addPet(Pet pet) throws ListDEException {
         if (this.head != null) {
             NodeDE temp = this.head;
             while (temp.getNext() != null) {
+                if(temp.getData().getIdentification().equals(pet.getIdentification())){
+                    throw new ListSEException("400","Ya existe una mascota con ese codigo");
+                }
                 temp = temp.getNext();
-
+            }
+            if(temp.getData().getIdentification().equals(pet.getIdentification())){
+                throw new ListSEException("400","Ya existe una mascota con ese codigo");
             }
             NodeDE newNode = new NodeDE(pet);
             temp.setNext(newNode);
@@ -33,17 +39,17 @@ public class ListDE {
         this.head = newNode;
         size++;
     }
-    public void deletePet(String phone) {
+    public void deletePet(String id) throws ListDEException{
         NodeDE empt = null;
         NodeDE temp = head;
 
-        while (temp != null && !temp.getData().getOwnerPhone().equals(phone)) {
+        while (temp != null && !temp.getData().getIdentification().equals(id)) {
             empt = temp;
             temp = temp.getNext();
         }
 
         if (temp == null) {
-            return;
+            throw new ListDEException("400","La mascota a eliminar no existe");
         }
 
         if (empt == null) {
@@ -79,7 +85,7 @@ public class ListDE {
 
     }
 
-    public int getCounPetsByLocationCode(String code){
+    public int getCounPetsByLocationCode(String code)throws ListDEException{
         int count =0;
         if( this.head!=null){
             NodeDE temp = this.head;
@@ -89,11 +95,13 @@ public class ListDE {
                 }
                 temp = temp.getNext();
             }
+        }else{
+            throw new ListDEException("400","No hay mascotas en la lista");
         }
         return count;
     }
 
-    public int getCountPetsByLocationCodeAndMale(String code){
+    public int getCountPetsByLocationCodeAndMale(String code)throws ListDEException{
         int male =0;
         if( this.head!=null){
             NodeDE temp = this.head;
@@ -103,10 +111,12 @@ public class ListDE {
                 }
                 temp = temp.getNext();
             }
+        }else{
+            throw new ListDEException("400","No hay mascotas en la lista");
         }
         return male;
     }
-    public int getCountPetsByLocationCodeAndFemale(String code){
+    public int getCountPetsByLocationCodeAndFemale(String code)throws ListDEException{
         int female =0;
         if( this.head!=null){
             NodeDE temp = this.head;
@@ -116,16 +126,18 @@ public class ListDE {
                 }
                 temp = temp.getNext();
             }
+        }else{
+            throw new ListDEException("400","No hay mascotas en la lista");
         }
         return female;
     }
     //from here,  I have to review all the next methods , and prove each one--------------------------------------------
-    public void orderByGender()  {
+    public void orderByGender() throws ListDEException{
         ListDE listDE1 = new ListDE();
         int sum = 0;
         NodeDE temp = head;
         if (head == null) {
-            System.out.println("Lo siento, no hay datos");
+            throw new ListDEException("400","No hay mascotas en la lista");
         } else {
             while (temp != null) {
                 if (temp.getData().getGender() == 'F') {
@@ -147,29 +159,31 @@ public class ListDE {
             this.head = listDE1.getHead();
         }
     }
-    public void losePositions(String phone, int lose) {
+    public void losePositions(String id, int lose) {
         NodeDE temp = head;
         int sum = 0;
         ListDE listDE1 = new ListDE();
         if (head != null) {
             while (temp != null) {
-                if (!temp.getData().getName().equals(phone)) {
+                if (!temp.getData().getIdentification().equals(id)) {
                     listDE1.addPet(temp.getData());
                     temp = temp.getNext();
                 } else {
                     temp = temp.getNext();
                 }
             }
+        }else{
+            throw new ListDEException("400","No hay mascotas en la lista");
         }
-        sum = lose + getPosByPhone(phone);
-        listDE1.addInPos(getPetByPhone(phone), sum);
+        sum = lose + getPosById(id);
+        listDE1.addInPos(getPetById(id), sum);
         this.head = listDE1.getHead();
     }
-    public int getPosByPhone(String phone) {
+    public int getPosById(String id) {
         NodeDE temp = this.head;
         int acum = 0;
         if (head != null) {
-            while (temp != null && !temp.getData().getOwnerPhone().equals(phone)) {
+            while (temp != null && !temp.getData().getIdentification().equals(id)) {
                 acum = acum + 1;
                 temp = temp.getNext();
 
@@ -178,21 +192,21 @@ public class ListDE {
         return acum;
     }
 
-    public Pet getPetByPhone(String phone) {
+    public Pet getPetById(String id) {
         NodeDE temp = head;
         if (head != null) {
             while (temp!=null){
                 temp= temp.getPrevious();
             }
-            while (temp != null && !temp.getData().getOwnerPhone().equals(phone)) {
+            while (temp != null && !temp.getData().getIdentification().equals(id)) {
                 temp = temp.getNext();
             }
         }
         Pet pet = new Pet(temp.getData().getAge(), temp.getData().getName(),
-                temp.getData().getType(), temp.getData().getRace(), temp.getData().getLocation(),temp.getData().getGender(), temp.getData().getOwnerPhone());
+                temp.getData().getType(), temp.getData().getRace(), temp.getData().getGender(),temp.getData().getIdentification(), temp.getData().getLocation());
         return pet;
     }
-    public void exchangeExtremes() {
+    public void exchangeExtremes() throws ListDEException{
         NodeDE temp = this.head;
         if (this.head != null) {
             while (temp!=null){
@@ -206,10 +220,12 @@ public class ListDE {
             this.head.setData(temp.getData());//to use the data of the temp that is in the last data
             temp.setData(copy);//the head data into the last
         }
+        }else{
+            throw new ListDEException("400","No hay suficientes datos en la lista");
         }
 
     }
-    public void invertList() {
+    public void invertList() throws ListDEException{
         NodeDE temp = this.head;
         ListDE listDE2 = new ListDE();
         if (this.head != null) {
@@ -218,9 +234,11 @@ public class ListDE {
                 temp = temp.getNext();
             }
             this.head = listDE2.getHead();
+        }else{
+            throw new ListDEException("400","No hay suficientes datos en la lista");
         }
     }
-    public void putPetsToBeginning() {
+    public void putPetsToBeginning() throws ListDEException{
         NodeDE temp = this.head;
         ListDE listDE1 = new ListDE();
         if (this.head != null) {
@@ -234,11 +252,13 @@ public class ListDE {
                 temp = temp.getNext();
             }
             this.head = listDE1.getHead();
+        }else{
+            throw new ListDEException("400","No hay suficientes datos en la lista");
         }
     }
 
     //method to delete a pet with a specified age-----------------------------------------------
-    public void deleteByAge(byte age) {
+    public void deleteByAge(byte age) throws ListDEException{
         NodeDE temp = this.head;
         ListDE listDE1 = new ListDE();
         if (this.head != null) {
@@ -249,11 +269,13 @@ public class ListDE {
                 temp = temp.getNext();
             }
             this.head = listDE1.getHead();
+        }else{
+            throw new ListDEException("400","No hay suficientes datos en la lista");
         }
     }
 
     //method to get the average age of the pets-----------------------------------------------
-    public double getAverageAge() {
+    public double getAverageAge() throws ListDEException{
         double averageAge = 0;
         NodeDE temp = this.head;
         if (this.head != null) {
@@ -263,32 +285,35 @@ public class ListDE {
             }
             averageAge = averageAge / size;
             return averageAge;
+        }else {
+            throw new ListDEException("400","No hay datos en la lista");
         }
-        return averageAge;
     }
 
     //method to earn positions------------------------------------------------
-    public void earnPositions(String phone, int earn) {
+    public void earnPositions(String id, int earn) throws ListDEException {
         NodeDE temp = head;
         int sum = 0;
         ListDE listDE1 = new ListDE();
         if (head != null) {
             while (temp != null) {
-                if (!temp.getData().getOwnerPhone().equals(phone)) {
+                if (!temp.getData().getIdentification().equals(id)) {
                     listDE1.addPet(temp.getData());
                     temp = temp.getNext();
                 } else {
                     temp = temp.getNext();
                 }
             }
+        }else{
+            throw new ListDEException("400","No hay datos en la lista");
         }
-        sum = getPosByPhone(phone) - earn;
-        listDE1.addInPos(getPetByPhone(phone), sum);
+        sum = getPosById(id) - earn;
+        listDE1.addInPos(getPetById(id), sum);
         this.head = listDE1.getHead();
     }
 
     //method to send the kids with a specifically character in its name------------------------
-    public void sendPetsToEndByChar(char user) {
+    public void sendPetsToEndByChar(char user)throws ListDEException {
         ListDE listDE1 = new ListDE();
         NodeDE temp = this.head;
         if (this.head != null) {
@@ -300,10 +325,12 @@ public class ListDE {
                 }
                 temp = temp.getNext();
             }
+        }else{
+            throw new ListDEException("400","no hay datos en la lista");
         }
         this.head = listDE1.getHead();
     }
-    public String generateReportByAge() {
+    public String generateReportByAge() throws ListDEException {
         int quantity1 = 0;
         int quantity2 = 0;
         int quantity3 = 0;
@@ -327,19 +354,21 @@ public class ListDE {
             }
 
 
+        }else{
+            throw new ListDEException("400","no hay datos en la lista");
         }
 
-        return " niños entre 0-3 años:" + quantity1 +
-                " niños entre 4-6 años:" + quantity2 +
-                " niños entre 7-9 años:" + quantity3 +
-                " niños entre 10-12 años:" + quantity4 +
-                " niños entre 13-15 años:" + quantity5;
+        return " mascotas entre 0-3 años:" + quantity1 +
+                " mascotas entre 4-6 años:" + quantity2 +
+                " mascotas entre 7-9 años:" + quantity3 +
+                " mascotas entre 10-12 años:" + quantity4 +
+                " mascotas entre 13-15 años:" + quantity5;
     }
-    public int verifyPhone(PetDTO petDTO) {
+    public int verifyId(PetDTO petDTO) {
         NodeDE temp = this.head;
         boolean found = false;
         while (temp != null) {
-            if (temp.getData().getOwnerPhone().equals(petDTO.getOwnerPhone())) {
+            if (temp.getData().getIdentification().equals(petDTO.getIdentification())) {
                 found = true;
                 break;
             }

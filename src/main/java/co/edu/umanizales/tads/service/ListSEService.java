@@ -18,24 +18,24 @@ public class ListSEService {
         kids = new ListSE();
     }
     //all the calls of the methods------------------------------------------------------------
-    public void deleteKid(String id){
+    public void deleteKid(String id)throws ListSEException{
         kids.deleteKid(id);
     }
     public void orderByGender()throws ListSEException {
         kids.orderByGender();
     }
-    public void addToBeginning(Kid kid){kids.addToStart(kid);}
-    public void addInPos(Kid kid,int pos){kids.addInPos(kid,pos);}
+    public void addToBeginning(Kid kid)throws ListSEException{kids.addToStart(kid);}
+    public void addInPos(Kid kid,int pos)throws ListSEException{kids.addInPos(kid,pos);}
     public void losePositions(String id, int lose)throws ListSEException {
         kids.losePositions(id,lose);
     }
     public void earnPositions(String id, int earn)throws ListSEException {kids.earnPositions(id,earn);}
-    public void exchangeExtremes() {
+    public void exchangeExtremes()throws ListSEException {
         kids.exchangeExtremes();
     }
-    public void invertList(){kids.invertList();}
+    public void invertList()throws ListSEException{kids.invertList();}
     public void putKidsToBeginning()throws ListSEException{kids.putKidsToBeginning();}
-    public void deleteKidByAge(byte age){kids.deleteByAge(age);}
+    public void deleteKidByAge(byte age)throws ListSEException{kids.deleteByAge(age);}
 
     public Node getKids()
     {
@@ -43,15 +43,15 @@ public class ListSEService {
     }
     public void add(Kid kid) throws ListSEException{kids.add(kid);}
     public void sendKidsToEndByChar(char user)throws ListSEException{kids.sendKidsToEndByChar(user);}
-    public double getAverageAge(){return kids.getAverageAge();}
-    public String generateReportByAge(){
+    public double getAverageAge()throws ListSEException{return kids.getAverageAge();}
+    public String generateReportByAge()throws ListSEException{
         return kids.generateReportByAge();
     }
-    public int getCountKidsByLocationCode(String code){
+    public int getCountKidsByLocationCode(String code)throws ListSEException{
         return kids.getCountKidsByLocationCode(code);
     }
     public int verifyId(KidDTO kid){return kids.verifyId(kid);}
-    public int getCountKidsByLocationCodeAndMale(String code){return kids.getCountKidsByLocationCodeAndMale(code);}
-    public int getCountKidsByLocationCodeAndFemale(String code){return kids.getCountKidsByLocationCodeAndFemale(code);}
+    public int getCountKidsByLocationCodeAndMale(String code)throws ListSEException{return kids.getCountKidsByLocationCodeAndMale(code);}
+    public int getCountKidsByLocationCodeAndFemale(String code) throws ListSEException{return kids.getCountKidsByLocationCodeAndFemale(code);}
 
 }
