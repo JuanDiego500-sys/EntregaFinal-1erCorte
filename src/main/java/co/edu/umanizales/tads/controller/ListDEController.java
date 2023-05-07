@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path= "list_de")
+@RequestMapping(path = "/list_de")
 public class ListDEController {
     @Autowired
     private ListDEService listDEService;
@@ -41,7 +41,7 @@ public class ListDEController {
                 if (location == null) {
                     return new ResponseEntity<>(new ResponseDTO(
                             404, "La ubicación no existe",
-                            null), HttpStatus.OK);
+                            null), HttpStatus.BAD_REQUEST);
                 }
                 listDEService.addPet(
                         new Pet(petDTO.getAge(),
@@ -55,7 +55,7 @@ public class ListDEController {
             throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping(path = "/delete_pet/{id}")
+    @PostMapping (path = "/delete_pet/{id}")
     public ResponseEntity<ResponseDTO> deletePet(@PathVariable String id) throws ListDEException {
         try {
             listDEService.deletePet(id);
@@ -89,14 +89,14 @@ public class ListDEController {
             return new ResponseEntity<>(new ResponseDTO(400,"Ya existe una mascota con ese id",errorDTOS),HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping(path = "/add_pet_in_pos/{pos}")
-    public ResponseEntity<ResponseDTO> addPetInPos(@Valid PetDTO petDTO,@Min (0)@PathVariable int pos) {
+    @PostMapping(path = "/add_pet_in_pos/{pos}")
+    public ResponseEntity<ResponseDTO> addPetInPos(@Valid @RequestBody PetDTO petDTO,@Min (0)@PathVariable int pos) {
         if (listDEService.verifyId(petDTO) == 0) {
             Location location = locationService.getLocationByCode(petDTO.getCodeLocation());
             if (location == null) {
                 return new ResponseEntity<>(new ResponseDTO(
                         404, "La ubicación no existe",
-                        null), HttpStatus.OK);
+                        null), HttpStatus.BAD_REQUEST);
             }
             listDEService.addInPos(
                     new Pet(petDTO.getAge(),

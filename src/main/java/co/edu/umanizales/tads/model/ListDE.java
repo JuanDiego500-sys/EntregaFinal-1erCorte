@@ -64,6 +64,10 @@ public class ListDE {
     public void addInPos(Pet pet, int pos2) {
         NodeDE temp = head;
         NodeDE newNode = new NodeDE(pet);
+        if (this.head==null){
+            addPet(pet);
+            return;
+        }
 
         if (pos2 >= size)//to do a validation and add the kid in the last position
             addPet(pet);
@@ -139,15 +143,22 @@ public class ListDE {
         if (head == null) {
             throw new ListDEException("400","No hay mascotas en la lista");
         } else {
+            boolean hasFemale = false;
+            boolean hasMale = false;
             while (temp != null) {
                 if (temp.getData().getGender() == 'F') {
                     listDE1.addPetToBeginning(temp.getData());
-
+                    hasFemale = true;
+                } else {
+                    hasMale = true;
                 }
                 temp = temp.getNext();
             }
+            if (!hasFemale || !hasMale) {
+                throw new ListDEException("400","La lista debe contener al menos una mascota de cada género");
             }
             temp = head;
+            sum = listDE1.getSize();
             while (temp != null) {
                 if (temp.getData().getGender() == 'M') {
                     listDE1.addInPos(temp.getData(), sum);
@@ -156,29 +167,59 @@ public class ListDE {
                 } else {
                     temp = temp.getNext();
                 }
+            }
             this.head = listDE1.getHead();
         }
     }
+
     public void losePositions(String id, int lose) {
         NodeDE temp = head;
         int sum = 0;
         ListDE listDE1 = new ListDE();
-        if (head != null) {
-            while (temp != null) {
-                if (!temp.getData().getIdentification().equals(id)) {
+        boolean found = false;
+        boolean added = false; // bandera para verificar si la mascota ya ha sido agregada a listDE1
+        while (temp != null) {
+            if (temp.getData().getIdentification().equals(id)) {
+                if (added) {
+                    // Si la mascota ya ha sido agregada a listDE1, no la agregues de nuevo.
                     listDE1.addPet(temp.getData());
-                    temp = temp.getNext();
                 } else {
-                    temp = temp.getNext();
+                    // Agrega la mascota a listDE1 y marca la bandera added como verdadera.
+                    listDE1.addPet(temp.getData());
+                    added = true;
                 }
+                found = true;
+            } else {
+                listDE1.addPet(temp.getData());
             }
-        }else{
-            throw new ListDEException("400","No hay mascotas en la lista");
+            temp = temp.getNext();
+        }
+        if (!found) {
+            throw new ListDEException("400","El id buscado no se encuentra en la lista");
         }
         sum = lose + getPosById(id);
-        listDE1.addInPos(getPetById(id), sum);
-        this.head = listDE1.getHead();
+        if (sum>size){
+            addPet(getPetById(id));
+        } else {
+            if (!listDE1.getPetByPos(sum).getIdentification().equals(id)) {
+                listDE1.addInPos(getPetById(id), sum);
+            }
+            this.head = listDE1.getHead();
+        }
     }
+    public Pet getPetByPos(int pos) {
+        if (pos < 0 || pos >= size) {
+            return null;
+        } else {
+            NodeDE temp = head;
+            for (int i = 0; i < pos; i++) {
+                temp = temp.getNext();
+            }
+            return temp.getData();
+        }
+    }
+
+
     public int getPosById(String id) {
         NodeDE temp = this.head;
         int acum = 0;
@@ -261,12 +302,18 @@ public class ListDE {
     public void deleteByAge(byte age) throws ListDEException{
         NodeDE temp = this.head;
         ListDE listDE1 = new ListDE();
+        boolean found = false;
         if (this.head != null) {
             while (temp != null) {
                 if (temp.getData().getAge() != age) {
                     listDE1.addPetToBeginning(temp.getData());
+                }else{
+                    found = true;
                 }
                 temp = temp.getNext();
+            }
+            if (!found){
+                throw new ListDEException("404","No hay mascotas con la edad indicada");
             }
             this.head = listDE1.getHead();
         }else{
