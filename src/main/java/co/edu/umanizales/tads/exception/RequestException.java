@@ -1,3 +1,4 @@
+
 package co.edu.umanizales.tads.exception;
 
 import lombok.Data;

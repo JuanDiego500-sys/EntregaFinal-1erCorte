@@ -118,10 +118,8 @@ public class ListSEController {
     }
     @PostMapping
     public ResponseEntity<ResponseDTO> addKid( @RequestBody @Valid KidDTO kidDTO) throws ListSEException {
-
         try {
             Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
-            if (listSEService.verifyId(kidDTO) == 0) {
                 if (location == null) {
                     return new ResponseEntity<>(new ResponseDTO(
                             404, "La ubicación no existe",
@@ -134,7 +132,6 @@ public class ListSEController {
                 return new ResponseEntity<>(new ResponseDTO(
                         200, "Se ha adicionado el petacón",
                         null), HttpStatus.OK);
-            }
         } catch (ListSEException e) {
 
         }
@@ -211,4 +208,3 @@ public class ListSEController {
 
 
 }//end of list se controller-----------------------------------------------------------------------------------
-        

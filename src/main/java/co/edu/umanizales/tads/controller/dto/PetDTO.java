@@ -1,10 +1,8 @@
 package co.edu.umanizales.tads.controller.dto;
+
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 public class PetDTO {
@@ -21,7 +19,7 @@ public class PetDTO {
     @Size(max = 30)
     private String race;
     private String codeLocation;
-    @javax.validation.constraints.Pattern(regexp = "^[MF]$", message = "El género debe ser 'M' o 'F'")
+    @Pattern(regexp = "^[MF]$", message = "El género debe ser 'M' o 'F'")
     private char gender;
     @Size(min = 6, max =15 )
     @NotBlank
