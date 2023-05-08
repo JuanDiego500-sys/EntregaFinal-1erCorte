@@ -282,4 +282,14 @@ public class ListDEController {
             throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+    @PostMapping (path = "/delete_pet_kamikaze/{id}")
+    public ResponseEntity<ResponseDTO> deletePetKamikaze(@PathVariable String id) throws ListDEException {
+        try {
+            listDEService.deleteKamikazePet(id);
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "Mascota eliminada", null), HttpStatus.OK);
+        }catch (ListDEException e){
+            throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }//end of ListDE controller----------------------------------------

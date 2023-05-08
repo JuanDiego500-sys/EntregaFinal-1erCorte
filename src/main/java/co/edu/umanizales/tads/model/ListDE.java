@@ -423,7 +423,48 @@ public class ListDE {
         }
         return found ? 1 : 0;
     }
-    public String toString(){
+    /*
+method to delete the pet "kamikaze" it means that the next and the previous release the data to be deleted.
+primer paso: si hay datos , creo un ayudante y lo posiciono en cabeza, creo otro ayudante y lo pongo como nulo. si
+no hay datos, termina el procedimiento y mandale una excepción de tipo listDE.
+segundo paso: mientras temporal sea distinto de nulo , y mientras los datos del temporal en donde esté parado sean
+diferentes de la identificacion requerida , al ayudante dos o "empt" digale que es igual a temp. ¿para que eso? porque
+necesito que empt se quede un dato atras de temp cuando se termine de iterar en la lista. Teniendo ya eso , ahora debo
+decirle a temporal que se pase al siguiente hasta que en un momento va a estar en el requerido. ahora, que pasa si ese
+a eliminar es el primer dato? entonces pregunto , si temp.getnext es diferente de nulo entonces le digo a cabeza que se haga
+set en el siguiente dato para no perder datos y quito el enlace de la cabeza vieja con el dato segundo. de otra manera significa que cabeza es el unico dato
+entonces bastaria con decirle a cabeza que se ponga como nulo.
+paso 3: si el temp cuando llama al next es nulo significa que estamos ante el último dato , entonces solo se debe eliminar el enlace que tiene con el previo.
+cada que yo termine de eliminar un dato lo que debo hacer es que debo decirle a el empt que ponga su set next en dos next adelante para saltarse el nodo a eliminar,y que
+a ese mismo previo lo ponga en dos previos mas atrás para no perder los datos.
+
+ */
+    public void deleteKamikazePet(String id) throws ListDEException{
+        if (this.head != null){
+            NodeDE empt = null;
+            NodeDE temp = this.head;
+            while (temp!= null && temp.getData().getIdentification().equals(id)){
+                empt = temp;
+                temp = temp.getNext();
+            }if (empt == null){
+                this.head = null;
+
+            }
+            if (temp.getNext() != null){
+                temp.setNext(temp);
+                temp.setPrevious(temp);
+                empt.setNext(empt.getNext().getNext());
+                empt.setPrevious(empt.getPrevious().getPrevious());
+
+            }
+        }else {
+            throw new ListDEException("404","No hay datos en la lista, no se pueden eliminar niños");
+        }
+        size--;
+    }
+
+
+    public String toListString(){
         StringBuilder sb = new StringBuilder();
         NodeDE temp = this.head;
         sb.append("[");

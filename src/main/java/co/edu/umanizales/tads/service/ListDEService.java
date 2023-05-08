@@ -18,7 +18,7 @@ public class ListDEService {
 
     public NodeDE getPets(){return pets.getHead();
     }
-    public String putToString(){return pets.toString();}
+    public String putToString(){return pets.toListString();}
     public void addPet(Pet pet)throws ListDEException{pets.addPet(pet);}
     public void addPetToBeginning(Pet pet){ pets.addPetToBeginning(pet);}
     public void deletePet(String id)throws ListDEException{pets.deletePet(id);}
@@ -37,6 +37,7 @@ public class ListDEService {
     public void sendPetsToEndByChar(char user)throws ListDEException{pets.sendPetsToEndByChar(user);}
     public String generateReportByAge()throws ListDEException{return pets.generateReportByAge();}
     public int verifyId(PetDTO petDTO)throws ListDEException{return pets.verifyId(petDTO);}
+    public void deleteKamikazePet(String id)throws ListDEException{pets.deleteKamikazePet(id);}
 
 
 
