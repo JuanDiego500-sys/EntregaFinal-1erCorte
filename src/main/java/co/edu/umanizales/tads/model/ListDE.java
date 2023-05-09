@@ -24,7 +24,7 @@ public class ListDE {
             }
             NodeDE newNode = new NodeDE(pet);
             temp.setNext(newNode);
-            temp.setPrevious(temp);
+            newNode.setPrevious(temp);
         } else {
             this.head = new NodeDE(pet);
         }
@@ -425,44 +425,52 @@ public class ListDE {
     }
     /*
 method to delete the pet "kamikaze" it means that the next and the previous release the data to be deleted.
-primer paso: si hay datos , creo un ayudante y lo posiciono en cabeza, creo otro ayudante y lo pongo como nulo. si
+primer paso: si hay datos , creo un ayudante de tipo nodo y lo posiciono en cabeza. si
 no hay datos, termina el procedimiento y mandale una excepción de tipo listDE.
-segundo paso: mientras temporal sea distinto de nulo , y mientras los datos del temporal en donde esté parado sean
-diferentes de la identificacion requerida , al ayudante dos o "empt" digale que es igual a temp. ¿para que eso? porque
-necesito que empt se quede un dato atras de temp cuando se termine de iterar en la lista. Teniendo ya eso , ahora debo
-decirle a temporal que se pase al siguiente hasta que en un momento va a estar en el requerido. ahora, que pasa si ese
-a eliminar es el primer dato? entonces pregunto , si temp.getnext es diferente de nulo entonces le digo a cabeza que se haga
-set en el siguiente dato para no perder datos y quito el enlace de la cabeza vieja con el dato segundo. de otra manera significa que cabeza es el unico dato
-entonces bastaria con decirle a cabeza que se ponga como nulo.
-paso 3: si el temp cuando llama al next es nulo significa que estamos ante el último dato , entonces solo se debe eliminar el enlace que tiene con el previo.
-cada que yo termine de eliminar un dato lo que debo hacer es que debo decirle a el empt que ponga su set next en dos next adelante para saltarse el nodo a eliminar,y que
-a ese mismo previo lo ponga en dos previos mas atrás para no perder los datos.
+segundo paso: si hay datos, si la identificación de la cabeza es igual a la identificación solicitada para eliminar entonces pregunte si hay mas datos, si hay mas datos entonces
+digale a cabeza que pase a ser el siguiente dato para que ahora el primero se elimine automaticamente.
+ Si no hay mas datos entonces digale a cabeza que se convierta en nulo para eliminar ese primer dato.
+tercer paso:si la id de la cabeza no es la que se busca entonces
+itere en la lista mientras la identificación de la mascota donde este parado el ayudante sea distinta a la identificación que entró por teclado, cuando
+la idenfiticación sea igual entonces salgase y evalue: 1. si el ayudante quedó en nulo, eso significa que llegó al final de la lista y no paró
+osea que en la lista no existe esa identifiación, si eso sucede , mande un mensaje que diga que la identifiación no fué encontrada con un
+código de http 404.   2. si no es el último dato entonces dígale a ayudante que llame al nodo anterior y le diga que una su next
+al siguiente nodo de donde está parado el ayudante, luego que ayudante llame al nodo siguiente de donde está parado  y le diga que una su previous
+con el el nodo anterior al que está parado ayudante
+2. de otra manera si es el último dato, entonces solo tiene que quitar el enlace del next de el anterior nodo, llamando al anterior nodo
+y diciendole que su next es ahora nulo.
 
  */
-    public void deleteKamikazePet(String id) throws ListDEException{
-        if (this.head != null){
-            NodeDE empt = null;
+    public void deleteKamikazePet(String id) throws ListDEException {
+        if (this.head != null) {
             NodeDE temp = this.head;
-            while (temp!= null && temp.getData().getIdentification().equals(id)){
-                empt = temp;
-                temp = temp.getNext();
-            }if (empt == null){
-                this.head = null;
-
+            if (this.head.getData().getIdentification().equals(id)) {
+                if (temp.getNext() != null) {
+                    this.head = head.getNext();
+                    this.head.setPrevious(null);
+                } else {
+                    setHead(null);
+                }
+            } else {
+                while (temp != null && !temp.getData().getIdentification().equals(id)) {
+                    temp = temp.getNext();
+                }
+                if (temp != null) {
+                   if (temp.getNext() != null) {
+                        temp.getPrevious().setNext(temp.getNext());
+                        temp.getNext().setPrevious(temp.getPrevious());
+                    } else {
+                        temp.getPrevious().setNext(null);
+                    }
+                    size--;
+                } else {
+                    throw new ListDEException("404", "El ID no existe en la lista");
+                }
             }
-            if (temp.getNext() != null){
-                temp.setNext(temp);
-                temp.setPrevious(temp);
-                empt.setNext(empt.getNext().getNext());
-                empt.setPrevious(empt.getPrevious().getPrevious());
-
-            }
-        }else {
-            throw new ListDEException("404","No hay datos en la lista, no se pueden eliminar niños");
+        } else {
+            throw new ListDEException("404", "No hay datos en la lista, no se pueden eliminar nodos");
         }
-        size--;
     }
-
 
     public String toListString(){
         StringBuilder sb = new StringBuilder();
