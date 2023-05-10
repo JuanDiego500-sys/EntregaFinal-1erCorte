@@ -14,13 +14,13 @@ public class ListDE {
         if (this.head != null) {
             NodeDE temp = this.head;
             while (temp.getNext() != null) {
-                if(temp.getData().getIdentification().equals(pet.getIdentification())){
-                    throw new ListSEException("400","Ya existe una mascota con ese codigo");
+                if (temp.getData().getIdentification().equals(pet.getIdentification())) {
+                    throw new ListSEException("400", "Ya existe una mascota con ese codigo");
                 }
                 temp = temp.getNext();
             }
-            if(temp.getData().getIdentification().equals(pet.getIdentification())){
-                throw new ListSEException("400","Ya existe una mascota con ese codigo");
+            if (temp.getData().getIdentification().equals(pet.getIdentification())) {
+                throw new ListSEException("400", "Ya existe una mascota con ese codigo");
             }
             NodeDE newNode = new NodeDE(pet);
             temp.setNext(newNode);
@@ -34,12 +34,13 @@ public class ListDE {
     public void addPetToBeginning(Pet pet) {
         NodeDE newNode = new NodeDE(pet);
         if (this.head != null) {
-          this.head.setPrevious(newNode);
+            this.head.setPrevious(newNode);
         }
         this.head = newNode;
         size++;
     }
-    public void deletePet(String id) throws ListDEException{
+
+    public void deletePet(String id) throws ListDEException {
         NodeDE empt = null;
         NodeDE temp = head;
 
@@ -49,22 +50,24 @@ public class ListDE {
         }
 
         if (temp == null) {
-            throw new ListDEException("400","La mascota a eliminar no existe");
+            throw new ListDEException("400", "La mascota a eliminar no existe");
         }
 
         if (empt == null) {
             head = temp.getNext();
         } else {
             empt.setNext(temp.getNext());
-        }if (temp.getNext() !=null){
+        }
+        if (temp.getNext() != null) {
             temp.getNext().setPrevious(empt);
         }
         size--;
     }
+
     public void addInPos(Pet pet, int pos2) {
         NodeDE temp = head;
         NodeDE newNode = new NodeDE(pet);
-        if (this.head==null){
+        if (this.head == null) {
             addPet(pet);
             return;
         }
@@ -75,73 +78,75 @@ public class ListDE {
             addPetToBeginning(pet);
 
         }
-            for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
-                temp = temp.getNext();
-            }
-            newNode.setNext(temp.getNext());
-            temp.setNext(newNode);
+        for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
+            temp = temp.getNext();
+        }
+        newNode.setNext(temp.getNext());
+        temp.setNext(newNode);
 
-            if (newNode.getNext() !=null){
-                newNode.getNext().setPrevious(newNode);
-            }
-            newNode.setPrevious(temp);
-            size++;
+        if (newNode.getNext() != null) {
+            newNode.getNext().setPrevious(newNode);
+        }
+        newNode.setPrevious(temp);
+        size++;
 
     }
 
-    public int getCounPetsByLocationCode(String code)throws ListDEException{
-        int count =0;
-        if( this.head!=null){
+    public int getCounPetsByLocationCode(String code) throws ListDEException {
+        int count = 0;
+        if (this.head != null) {
             NodeDE temp = this.head;
-            while(temp != null){
-                if(temp.getData().getLocation().getCode().equals(code)){
+            while (temp != null) {
+                if (temp.getData().getLocation().getCode().equals(code)) {
                     count++;
                 }
                 temp = temp.getNext();
             }
-        }else{
-            throw new ListDEException("400","No hay mascotas en la lista");
+        } else {
+            throw new ListDEException("400", "No hay mascotas en la lista");
         }
         return count;
     }
 
-    public int getCountPetsByLocationCodeAndMale(String code)throws ListDEException{
-        int male =0;
-        if( this.head!=null){
+    public int getCountPetsByLocationCodeAndMale(String code) throws ListDEException {
+        int male = 0;
+        if (this.head != null) {
             NodeDE temp = this.head;
-            while(temp != null){
-                if(temp.getData().getLocation().getCode().equals(code)&&temp.getData().getGender() == 'M'){
+            while (temp != null) {
+                if (temp.getData().getLocation().getCode().equals(code) && temp.getData().getGender() == 'M') {
                     male++;
                 }
                 temp = temp.getNext();
             }
-        }else{
-            throw new ListDEException("400","No hay mascotas en la lista");
+        } else {
+            throw new ListDEException("400", "No hay mascotas en la lista");
         }
         return male;
     }
-    public int getCountPetsByLocationCodeAndFemale(String code)throws ListDEException{
-        int female =0;
-        if( this.head!=null){
+
+    public int getCountPetsByLocationCodeAndFemale(String code) throws ListDEException {
+        int female = 0;
+        if (this.head != null) {
             NodeDE temp = this.head;
-            while(temp != null){
-                if(temp.getData().getLocation().getCode().equals(code)&&temp.getData().getGender() == 'F'){
+            while (temp != null) {
+                if (temp.getData().getLocation().getCode().equals(code) && temp.getData().getGender() == 'F') {
                     female++;
                 }
                 temp = temp.getNext();
             }
-        }else{
-            throw new ListDEException("400","No hay mascotas en la lista");
+        } else {
+            throw new ListDEException("400", "No hay mascotas en la lista");
         }
         return female;
     }
+
     //from here,  I have to review all the next methods , and prove each one--------------------------------------------
-    public void orderByGender() throws ListDEException{
+    public void orderByGender() throws ListDEException {
         ListDE listDE1 = new ListDE();
         int sum = 0;
         NodeDE temp = head;
         if (head == null) {
-            throw new ListDEException("400","No hay mascotas en la lista");
+            throw new ListDEException("400", "No hay mascotas en la lista");
         } else {
             boolean hasFemale = false;
             boolean hasMale = false;
@@ -155,7 +160,7 @@ public class ListDE {
                 temp = temp.getNext();
             }
             if (!hasFemale || !hasMale) {
-                throw new ListDEException("400","La lista debe contener al menos una mascota de cada género");
+                throw new ListDEException("400", "La lista debe contener al menos una mascota de cada género");
             }
             temp = head;
             sum = listDE1.getSize();
@@ -195,10 +200,10 @@ public class ListDE {
             temp = temp.getNext();
         }
         if (!found) {
-            throw new ListDEException("400","El id buscado no se encuentra en la lista");
+            throw new ListDEException("400", "El id buscado no se encuentra en la lista");
         }
         sum = lose + getPosById(id);
-        if (sum>size){
+        if (sum > size) {
             addPet(getPetById(id));
         } else {
             if (!listDE1.getPetByPos(sum).getIdentification().equals(id)) {
@@ -207,6 +212,7 @@ public class ListDE {
             this.head = listDE1.getHead();
         }
     }
+
     public Pet getPetByPos(int pos) {
         if (pos < 0 || pos >= size) {
             return null;
@@ -236,37 +242,40 @@ public class ListDE {
     public Pet getPetById(String id) {
         NodeDE temp = head;
         if (head != null) {
-            while (temp!=null){
-                temp= temp.getPrevious();
+            while (temp != null) {
+                temp = temp.getPrevious();
             }
             while (temp != null && !temp.getData().getIdentification().equals(id)) {
                 temp = temp.getNext();
             }
         }
         Pet pet = new Pet(temp.getData().getAge(), temp.getData().getName(),
-                temp.getData().getType(), temp.getData().getRace(), temp.getData().getGender(),temp.getData().getIdentification(), temp.getData().getLocation());
+                temp.getData().getType(), temp.getData().getRace(), temp.getData().getGender(), temp.getData().getIdentification(), temp.getData().getLocation());
         return pet;
     }
-    public void exchangeExtremes() throws ListDEException{
+
+    public void exchangeExtremes() throws ListDEException {
         NodeDE temp = this.head;
         if (this.head != null) {
-            while (temp!=null){
+            while (temp != null) {
                 temp = temp.getPrevious();
-            }Pet copy = temp.getData();
-        if (this.head.getNext() != null && this.head.getPrevious() != null) {
-            while (temp.getNext() != null) {
-                temp = temp.getNext();
-            }//temp is in the last data
-            //creation of a copy
-            this.head.setData(temp.getData());//to use the data of the temp that is in the last data
-            temp.setData(copy);//the head data into the last
-        }
-        }else{
-            throw new ListDEException("400","No hay suficientes datos en la lista");
+            }
+            Pet copy = temp.getData();
+            if (this.head.getNext() != null && this.head.getPrevious() != null) {
+                while (temp.getNext() != null) {
+                    temp = temp.getNext();
+                }//temp is in the last data
+                //creation of a copy
+                this.head.setData(temp.getData());//to use the data of the temp that is in the last data
+                temp.setData(copy);//the head data into the last
+            }
+        } else {
+            throw new ListDEException("400", "No hay suficientes datos en la lista");
         }
 
     }
-    public void invertList() throws ListDEException{
+
+    public void invertList() throws ListDEException {
         NodeDE temp = this.head;
         ListDE listDE2 = new ListDE();
         if (this.head != null) {
@@ -275,11 +284,12 @@ public class ListDE {
                 temp = temp.getNext();
             }
             this.head = listDE2.getHead();
-        }else{
-            throw new ListDEException("400","No hay suficientes datos en la lista");
+        } else {
+            throw new ListDEException("400", "No hay suficientes datos en la lista");
         }
     }
-    public void putPetsToBeginning() throws ListDEException{
+
+    public void putPetsToBeginning() throws ListDEException {
         NodeDE temp = this.head;
         ListDE listDE1 = new ListDE();
         if (this.head != null) {
@@ -293,13 +303,13 @@ public class ListDE {
                 temp = temp.getNext();
             }
             this.head = listDE1.getHead();
-        }else{
-            throw new ListDEException("400","No hay suficientes datos en la lista");
+        } else {
+            throw new ListDEException("400", "No hay suficientes datos en la lista");
         }
     }
 
     //method to delete a pet with a specified age-----------------------------------------------
-    public void deleteByAge(byte age) throws ListDEException{
+    public void deleteByAge(byte age) throws ListDEException {
         NodeDE temp = this.head;
         ListDE listDE1 = new ListDE();
         boolean found = false;
@@ -307,22 +317,22 @@ public class ListDE {
             while (temp != null) {
                 if (temp.getData().getAge() != age) {
                     listDE1.addPetToBeginning(temp.getData());
-                }else{
+                } else {
                     found = true;
                 }
                 temp = temp.getNext();
             }
-            if (!found){
-                throw new ListDEException("404","No hay mascotas con la edad indicada");
+            if (!found) {
+                throw new ListDEException("404", "No hay mascotas con la edad indicada");
             }
             this.head = listDE1.getHead();
-        }else{
-            throw new ListDEException("400","No hay suficientes datos en la lista");
+        } else {
+            throw new ListDEException("400", "No hay suficientes datos en la lista");
         }
     }
 
     //method to get the average age of the pets-----------------------------------------------
-    public double getAverageAge() throws ListDEException{
+    public double getAverageAge() throws ListDEException {
         double averageAge = 0;
         NodeDE temp = this.head;
         if (this.head != null) {
@@ -332,8 +342,8 @@ public class ListDE {
             }
             averageAge = averageAge / size;
             return averageAge;
-        }else {
-            throw new ListDEException("400","No hay datos en la lista");
+        } else {
+            throw new ListDEException("400", "No hay datos en la lista");
         }
     }
 
@@ -351,8 +361,8 @@ public class ListDE {
                     temp = temp.getNext();
                 }
             }
-        }else{
-            throw new ListDEException("400","No hay datos en la lista");
+        } else {
+            throw new ListDEException("400", "No hay datos en la lista");
         }
         sum = getPosById(id) - earn;
         listDE1.addInPos(getPetById(id), sum);
@@ -360,7 +370,7 @@ public class ListDE {
     }
 
     //method to send the kids with a specifically character in its name------------------------
-    public void sendPetsToEndByChar(char user)throws ListDEException {
+    public void sendPetsToEndByChar(char user) throws ListDEException {
         ListDE listDE1 = new ListDE();
         NodeDE temp = this.head;
         if (this.head != null) {
@@ -372,11 +382,12 @@ public class ListDE {
                 }
                 temp = temp.getNext();
             }
-        }else{
-            throw new ListDEException("400","no hay datos en la lista");
+        } else {
+            throw new ListDEException("400", "no hay datos en la lista");
         }
         this.head = listDE1.getHead();
     }
+
     public String generateReportByAge() throws ListDEException {
         int quantity1 = 0;
         int quantity2 = 0;
@@ -401,8 +412,8 @@ public class ListDE {
             }
 
 
-        }else{
-            throw new ListDEException("400","no hay datos en la lista");
+        } else {
+            throw new ListDEException("400", "no hay datos en la lista");
         }
 
         return " mascotas entre 0-3 años:" + quantity1 +
@@ -411,6 +422,7 @@ public class ListDE {
                 " mascotas entre 10-12 años:" + quantity4 +
                 " mascotas entre 13-15 años:" + quantity5;
     }
+
     public int verifyId(PetDTO petDTO) {
         NodeDE temp = this.head;
         boolean found = false;
@@ -423,6 +435,7 @@ public class ListDE {
         }
         return found ? 1 : 0;
     }
+
     /*
 method to delete the pet "kamikaze" it means that the next and the previous release the data to be deleted.
 primer paso: si hay datos , creo un ayudante de tipo nodo y lo posiciono en cabeza. si
@@ -456,7 +469,7 @@ y diciendole que su next es ahora nulo.
                     temp = temp.getNext();
                 }
                 if (temp != null) {
-                   if (temp.getNext() != null) {
+                    if (temp.getNext() != null) {
                         temp.getPrevious().setNext(temp.getNext());
                         temp.getNext().setPrevious(temp.getPrevious());
                     } else {
@@ -472,14 +485,14 @@ y diciendole que su next es ahora nulo.
         }
     }
 
-    public String toListString(){
+    public String toListString() {
         StringBuilder sb = new StringBuilder();
         NodeDE temp = this.head;
         sb.append("[");
-        while (temp != null){
+        while (temp != null) {
             sb.append(temp.getData().toString());
             temp = temp.getNext();
-            if (temp != null){
+            if (temp != null) {
                 sb.append(", ");
             }
         }
@@ -487,8 +500,6 @@ y diciendole que su next es ahora nulo.
         return sb.toString();
 
     }
-
-
 
 
 }//end of list De-------------------------------------

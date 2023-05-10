@@ -3,6 +3,7 @@ package co.edu.umanizales.tads.model;
 import co.edu.umanizales.tads.controller.dto.KidDTO;
 import co.edu.umanizales.tads.exception.ListSEException;
 import lombok.Data;
+
 import java.util.ArrayList;
 
 @Data
@@ -11,41 +12,39 @@ public class ListSE {
     private int size;
     private ArrayList<String> listCity = new ArrayList<String>();
 
-    public void add(Kid kid)throws ListSEException  {
-        if (kid == null){
-            throw new ListSEException("400","digitó mal los datos");
+    public void add(Kid kid) throws ListSEException {
+        if (kid == null) {
+            throw new ListSEException("400", "digitó mal los datos");
         }
-        if(head != null){
+        if (head != null) {
             Node temp = head;
-            while(temp.getNext() !=null)
-            {
-                if(temp.getData().getIdentification().equals(kid.getIdentification())){
-                    throw new ListSEException("400","Ya existe un niño con ese codigo");
+            while (temp.getNext() != null) {
+                if (temp.getData().getIdentification().equals(kid.getIdentification())) {
+                    throw new ListSEException("400", "Ya existe un niño con ese codigo");
                 }
                 temp = temp.getNext();
 
             }
-            if(temp.getData().getIdentification().equals(kid.getIdentification())){
-                    throw new ListSEException("400","Ya existe un niño con ese codigo");
+            if (temp.getData().getIdentification().equals(kid.getIdentification())) {
+                throw new ListSEException("400", "Ya existe un niño con ese codigo");
             }
 
             Node newNode = new Node(kid);
             temp.setNext(newNode);
-        }
-        else {
+        } else {
             head = new Node(kid);
         }
-        size ++;
+        size++;
     }//end of add to end----------------------------------------------------------------
 
-    public void addToStart(Kid kid){
-            if (head != null) {
-                Node newNode = new Node(kid);
-                newNode.setNext(head);
-                head = newNode;
-            } else {
-                head = new Node(kid);
-            }
+    public void addToStart(Kid kid) {
+        if (head != null) {
+            Node newNode = new Node(kid);
+            newNode.setNext(head);
+            head = newNode;
+        } else {
+            head = new Node(kid);
+        }
         size++;
     }//end of the addtostart------------------------------------------------------------
 
@@ -86,7 +85,7 @@ public class ListSE {
             temp = temp.getNext();
         }
         if (temp == null) {
-            throw new ListSEException("400","el niño a eliminar no existe");
+            throw new ListSEException("400", "el niño a eliminar no existe");
         }
 
         if (empt == null) {
@@ -104,7 +103,7 @@ public class ListSE {
         int sum = 0;
         Node temp = head;
         if (head == null) {
-            throw new ListSEException("404","no hay datos en la lista");
+            throw new ListSEException("404", "no hay datos en la lista");
         } else {
             while (temp != null) {
                 if (temp.getData().getGender() == 'F') {
@@ -144,8 +143,8 @@ public class ListSE {
                     temp = temp.getNext();
                 }
             }
-        }else{
-            throw new ListSEException("404","no hay datos en la lista");
+        } else {
+            throw new ListSEException("404", "no hay datos en la lista");
         }
         sum = lose + getPosById(id);
         listSE1.addInPosValidations(getKidById(id), sum);
@@ -214,7 +213,7 @@ public class ListSE {
     }
 
     //method to exchange the extremes of the list, the head to the last and vice versa--------------
-    public void exchangeExtremes()throws ListSEException {
+    public void exchangeExtremes() throws ListSEException {
         if (this.head != null && this.head.getNext() != null) {
             Node temp = this.head;
             while (temp.getNext() != null) {
@@ -224,14 +223,14 @@ public class ListSE {
             this.head.setData(temp.getData());//to use the data of the temp that is in the last data
             temp.setData(copy);//the head data into the last
 
-        }else{
-            throw new ListSEException("404","la lista no tiene suficientes datos para realizar la operación");
+        } else {
+            throw new ListSEException("404", "la lista no tiene suficientes datos para realizar la operación");
         }
 
     }
 
     //method to invert the list se-----------------------------------------------------------------------------
-    public void invertList()throws ListSEException {
+    public void invertList() throws ListSEException {
         Node temp = this.head;
         ListSE listSE2 = new ListSE();
         if (this.head != null) {
@@ -240,8 +239,8 @@ public class ListSE {
                 temp = temp.getNext();
             }
             this.head = listSE2.getHead();
-        }else{
-            throw new ListSEException("404","no hay datos en la lista");
+        } else {
+            throw new ListSEException("404", "no hay datos en la lista");
         }
     }
 
@@ -260,13 +259,13 @@ public class ListSE {
                 temp = temp.getNext();
             }
             this.head = listSE1.getHead();
-        }else{
-            throw new ListSEException("404","no hay datos en la lista para realizar la operación");
+        } else {
+            throw new ListSEException("404", "no hay datos en la lista para realizar la operación");
         }
     }
 
     //method to delete a kid with a specified age-----------------------------------------------
-    public void deleteByAge(byte age) throws ListSEException{
+    public void deleteByAge(byte age) throws ListSEException {
         Node temp = this.head;
         ListSE listSE1 = new ListSE();
         if (this.head != null) {
@@ -277,13 +276,13 @@ public class ListSE {
                 temp = temp.getNext();
             }
             this.head = listSE1.getHead();
-        }else{
-            throw new ListSEException("404","no hay datos en la lista ");
+        } else {
+            throw new ListSEException("404", "no hay datos en la lista ");
         }
     }
 
     //method to get the average age of the kids-----------------------------------------------
-    public double getAverageAge() throws ListSEException{
+    public double getAverageAge() throws ListSEException {
         double averageAge = 0;
         Node temp = this.head;
         if (this.head != null) {
@@ -293,8 +292,8 @@ public class ListSE {
             }
             averageAge = averageAge / getLength();
             return averageAge;
-        }else{
-            throw new ListSEException("404","la lista no tiene suficientes datos");
+        } else {
+            throw new ListSEException("404", "la lista no tiene suficientes datos");
         }
 
     }
@@ -313,8 +312,8 @@ public class ListSE {
                     temp = temp.getNext();
                 }
             }
-        }else{
-            throw new ListSEException("404","no hay suficientes datos en la lista");
+        } else {
+            throw new ListSEException("404", "no hay suficientes datos en la lista");
         }
         sum = getPosById(id) - earn;
         listSE1.addInPosValidations(getKidById(id), sum);
@@ -334,13 +333,14 @@ public class ListSE {
                 }
                 temp = temp.getNext();
             }
-        }else{
-            throw new ListSEException("404","no hay suficientes datos en la lista");
+        } else {
+            throw new ListSEException("404", "no hay suficientes datos en la lista");
         }
         this.head = listSE1.getHead();
     }
+
     //method to generate a report of how much kids are in each range of ages
-    public String generateReportByAge()throws ListSEException {
+    public String generateReportByAge() throws ListSEException {
         int quantity1 = 0;
         int quantity2 = 0;
         int quantity3 = 0;
@@ -364,8 +364,8 @@ public class ListSE {
             }
 
 
-        }else{
-            throw new ListSEException("404","no hay suficientes datos en la lista");
+        } else {
+            throw new ListSEException("404", "no hay suficientes datos en la lista");
         }
 
         return " niños entre 0-3 años:" + quantity1 +
@@ -374,22 +374,24 @@ public class ListSE {
                 " niños entre 10-12 años:" + quantity4 +
                 " niños entre 13-15 años:" + quantity5;
     }
+
     //method to count the kids by location--------------------------------------------------------------------------
-    public int getCountKidsByLocationCode(String code)throws ListSEException{
-        int count =0;
-        if( this.head!=null){
+    public int getCountKidsByLocationCode(String code) throws ListSEException {
+        int count = 0;
+        if (this.head != null) {
             Node temp = this.head;
-            while(temp != null){
-                if(temp.getData().getLocation().getCode().equals(code)){
+            while (temp != null) {
+                if (temp.getData().getLocation().getCode().equals(code)) {
                     count++;
                 }
                 temp = temp.getNext();
             }
-        }else{
-            throw new ListSEException("404","la lista no tiene suficiente datos");
+        } else {
+            throw new ListSEException("404", "la lista no tiene suficiente datos");
         }
         return count;
     }
+
     //method to verify the id to don't add kids with the same id-----------------------------------------------------
     public int verifyId(KidDTO kid) {
         Node temp = this.head;
@@ -403,33 +405,35 @@ public class ListSE {
         }
         return found ? 1 : 0;
     }
-    public int getCountKidsByLocationCodeAndMale(String code)throws ListSEException{
-        int male =0;
-        if( this.head!=null){
+
+    public int getCountKidsByLocationCodeAndMale(String code) throws ListSEException {
+        int male = 0;
+        if (this.head != null) {
             Node temp = this.head;
-            while(temp != null){
-                if(temp.getData().getLocation().getCode().equals(code)&&temp.getData().getGender() == 'M'){
+            while (temp != null) {
+                if (temp.getData().getLocation().getCode().equals(code) && temp.getData().getGender() == 'M') {
                     male++;
                 }
                 temp = temp.getNext();
             }
-        }else{
-            throw new ListSEException("404","no hay suficientes datos en la lista");
+        } else {
+            throw new ListSEException("404", "no hay suficientes datos en la lista");
         }
         return male;
     }
-    public int getCountKidsByLocationCodeAndFemale(String code)throws ListSEException{
-        int female =0;
-        if( this.head!=null){
+
+    public int getCountKidsByLocationCodeAndFemale(String code) throws ListSEException {
+        int female = 0;
+        if (this.head != null) {
             Node temp = this.head;
-            while(temp != null){
-                if(temp.getData().getLocation().getCode().equals(code)&&temp.getData().getGender() == 'F'){
+            while (temp != null) {
+                if (temp.getData().getLocation().getCode().equals(code) && temp.getData().getGender() == 'F') {
                     female++;
                 }
                 temp = temp.getNext();
             }
-        }else{
-            throw new ListSEException("404","no hay suficientes datos en la lista");
+        } else {
+            throw new ListSEException("404", "no hay suficientes datos en la lista");
         }
         return female;
     }

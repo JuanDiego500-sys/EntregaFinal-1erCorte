@@ -158,24 +158,25 @@ public class ListSEController {
             throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
     @PostMapping
-    public ResponseEntity<ResponseDTO> addKid( @RequestBody @Valid KidDTO kidDTO) throws ListSEException {
+    public ResponseEntity<ResponseDTO> addKid(@RequestBody @Valid KidDTO kidDTO) throws ListSEException {
         try {
             Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
-                if (location == null) {
-                    return new ResponseEntity<>(new ResponseDTO(
-                            404, "La ubicación no existe",
-                            null), HttpStatus.OK);
-                }
-                listSEService.add(
-                        new Kid(kidDTO.getIdentification(),
-                                kidDTO.getName(), kidDTO.getAge(),
-                                kidDTO.getGender(), location));
+            if (location == null) {
                 return new ResponseEntity<>(new ResponseDTO(
-                        200, "Se ha adicionado el petacón",
+                        404, "La ubicación no existe",
                         null), HttpStatus.OK);
+            }
+            listSEService.add(
+                    new Kid(kidDTO.getIdentification(),
+                            kidDTO.getName(), kidDTO.getAge(),
+                            kidDTO.getGender(), location));
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "Se ha adicionado el petacón",
+                    null), HttpStatus.OK);
         } catch (ListSEException e) {
-            throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
+            throw new RequestException(e.getCode(), e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
