@@ -2,7 +2,6 @@ package co.edu.umanizales.tads.model;
 
 import co.edu.umanizales.tads.controller.dto.PetDTO;
 import co.edu.umanizales.tads.exception.ListDEException;
-import co.edu.umanizales.tads.exception.ListSEException;
 import lombok.Data;
 
 @Data
@@ -15,12 +14,12 @@ public class ListDE {
             NodeDE temp = this.head;
             while (temp.getNext() != null) {
                 if (temp.getData().getIdentification().equals(pet.getIdentification())) {
-                    throw new ListSEException("400", "Ya existe una mascota con ese codigo");
+                    throw new ListDEException("400", "Ya existe una mascota con ese codigo");
                 }
                 temp = temp.getNext();
             }
             if (temp.getData().getIdentification().equals(pet.getIdentification())) {
-                throw new ListSEException("400", "Ya existe una mascota con ese codigo");
+                throw new ListDEException("400", "Ya existe una mascota con ese codigo");
             }
             NodeDE newNode = new NodeDE(pet);
             temp.setNext(newNode);
