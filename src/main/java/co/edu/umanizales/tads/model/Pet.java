@@ -30,4 +30,5 @@ public class Pet {
     private String identification;
     @Valid
     private Location location;
+    private boolean shower;
 }//end of pet------------------------------------------

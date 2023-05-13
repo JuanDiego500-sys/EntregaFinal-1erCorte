@@ -27,4 +27,6 @@ public class PetDTO {
     private String identification;
     @NotBlank(message = "El código de la locación no puede quedar en vacío")
     private String codeLocation;
+    @NotNull(message= "el atributo de baño no puede estar vacío")
+    private boolean shower;
 }//end of the petDTO------------------------------------

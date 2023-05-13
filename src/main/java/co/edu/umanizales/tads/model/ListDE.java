@@ -33,9 +33,21 @@ public class ListDE {
     public void addPetToBeginning(Pet pet) {
         NodeDE newNode = new NodeDE(pet);
         if (this.head != null) {
+            NodeDE temp = this.head;
+            while (temp.getNext() != null) {
+                if (temp.getData().getIdentification().equals(pet.getIdentification())) {
+                    throw new ListDEException("400", "Ya existe una mascota con ese codigo");
+                }
+                temp = temp.getNext();
+            }
+            if (temp.getData().getIdentification().equals(pet.getIdentification())) {
+                throw new ListDEException("400", "Ya existe una mascota con ese codigo");
+            }
             this.head.setPrevious(newNode);
+            newNode.setNext(this.head);
         }
         this.head = newNode;
+
         size++;
     }
 
@@ -249,7 +261,7 @@ public class ListDE {
             }
         }
         Pet pet = new Pet(temp.getData().getAge(), temp.getData().getName(),
-                temp.getData().getType(), temp.getData().getRace(), temp.getData().getGender(), temp.getData().getIdentification(), temp.getData().getLocation());
+                temp.getData().getType(), temp.getData().getRace(), temp.getData().getGender(), temp.getData().getIdentification(), temp.getData().getLocation(),temp.getData().isShower());
         return pet;
     }
 
