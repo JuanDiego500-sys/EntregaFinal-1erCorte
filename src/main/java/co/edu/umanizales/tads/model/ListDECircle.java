@@ -1,12 +1,18 @@
 package co.edu.umanizales.tads.model;
 
 import co.edu.umanizales.tads.exception.ListDEException;
+import com.google.gson.Gson;
 import lombok.Data;
+import javax.json.Json;
+import javax.json.JsonObject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ListDECircle {
     private NodeDE head;
     private int size;
+
     /*metodo agregar al final
     preguntar si hay datos, si no hay entonces le digo a nuevo nodo que es la nueva cabeza, además , le digo que sus
     brazos le apunten a si mismo para empezar a crear la lista circular.
@@ -48,6 +54,7 @@ public class ListDECircle {
         }
         size++;
     }
+
     /*
     para agregar al inicio, si no hay datos entonces llamo al metodo agregar al final que tengo arriba que es el que
     ya tengo con esa validación ya hecha.
@@ -77,10 +84,89 @@ public class ListDECircle {
             this.head.getNext().setPrevious(newNode);
             this.head.setNext(newNode);
             this.head = newNode;
-        }else {
+        } else {
             addPetToEnd(pet);
         }
         size++;
     }
+    /*
+    metodo agregar en posicion
+    se crea el ayudante y se crea un nuevo nodo donde va a ir la mascota
+    si no hay datos entonces se llama a agregar al final para que haga la validacion.
+    si la posición es igual a 0 entonces llamo a agregar al inicio que tiene esa validacion.
+    en otro caso , inicio la posicion en 1 que es la cabeza.
+    -------------------------------------------------------------------------------------------------------------
+    ahora hay dos escenarios, para girar a la derecha se usan valores positivos y para la izquierda valores negativos.
+    -------------------------------------------------------------------------------------------------------------
+    para girar hacia la derecha se hace el ciclo para recorrer la lista hacia la posicion en la que se quiere agregar a
+    la mascota (contando que cabeza cuando es el primer dato es la posicion 0).
+    ahora el previo de newNode se va para el temporal , el next de newNode se va para el siguiente al temporal.
+    el previo del siguiente a temporal va a apuntar a newNode y el next de temporal se va para newNode.
+    ----------------------------------------------------------------------------------------------------------------
+    si el valor es negativo y se va a girar hacia la izquierda: se transforma el valor en positivo para
+    hacer el mismo ciclo de for pero diciendole al ayudante que se vaya para el anterior.
+    cuando termine el ciclo entonces.
+    el previo de newNode se va para el anterior del temp.
+    el next del newNode se va para el temp.
+    el previous de el temp se va para el newNode
+    el next del anterior del temp se va para el newNode
+    con esto ya finaliza el metodo.
+     */
+    public void addInPos(Pet pet, int pos2) {
+        NodeDE temp = head;
+        NodeDE newNode = new NodeDE(pet);
+        if (this.head == null) {
+            addPetToEnd(pet);
+            return;
+        }
+        if (pos2 == 0) {
+            addPetToBeginning(pet);
+        }if (pos2>0) {
+            for (int i = 1; i < pos2; i++) {
+                temp = temp.getNext();
+            }
+            newNode.setPrevious(temp);
+            newNode.setNext(temp.getNext());
+            temp.getNext().setPrevious(newNode);
+            temp.setNext(newNode);
+        }else if(pos2<0){
+            int pos = pos2 *(-1);
+            for (int i = 1; i < pos2;i++){
+                temp = temp.getPrevious();
+            }
+            newNode.setPrevious(temp.getPrevious());
+            newNode.setNext(temp);
+            temp.setPrevious(newNode);
+            temp.getPrevious().setNext(newNode);
+        }
+        size++;
+
+    }
+    /*
+    method to show the listDE
+    voy a retornar la lista en tipo json para asi mostrar los datos estructurados.
+    creo una lista para guardar la data de cada mascota
+    creo un ayudante y lo posiciono en la cabeza.
+    recorro la lista agregando la data de los objetos a la lista mientras que el ayudante no este parado en la cabeza
+    que es el ultimo dato.
+    uso la libreria Gson para transformar de lista a json todos los datos obtenidos.
+    creo un objeto de tipo jsonObject para retornarlo de esa manera con ayuda de varias funciones.
+     */
+    public JsonObject showList() {
+        List<Object> data = new ArrayList<>();
+        NodeDE temp = this.head;
+        while (temp != this.head) {
+            data.add(temp.getData());
+            temp = temp.getNext();
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(data);
+        JsonObject jsonObject = Json.createObjectBuilder()
+                .add("data", json)
+                .build();
+        return jsonObject;
+    }
+
 
 }
