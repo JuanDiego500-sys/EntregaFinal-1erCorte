@@ -30,5 +30,6 @@ public class Pet {
     private String identification;
     @Valid
     private Location location;
+    @Pattern(regexp = "^[ID]$", message = "El género debe ser 'I' o 'D'")
     private boolean shower;
 }//end of pet------------------------------------------

@@ -1,7 +1,7 @@
 package co.edu.umanizales.tads.controller;
 
-import co.edu.umanizales.tads.controller.dto.ErrorDTO;
 import co.edu.umanizales.tads.controller.dto.PetByLocationDTO;
+import co.edu.umanizales.tads.controller.dto.PetDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
 import co.edu.umanizales.tads.exception.ListDEException;
 import co.edu.umanizales.tads.exception.RequestException;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import co.edu.umanizales.tads.controller.dto.PetDTO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -32,7 +31,7 @@ public class ListDEController {
     @GetMapping(path = "/get_list")
     public ResponseEntity<ResponseDTO> getPets() {
         return new ResponseEntity<>(new ResponseDTO(
-                200, listDEService.putToString(), null), HttpStatus.OK);
+                200, listDEService.showList(), null), HttpStatus.OK);
     }
 
     @PostMapping
@@ -70,7 +69,7 @@ public class ListDEController {
 
     @PostMapping(path = "/add_pet_to_beginning")
     public ResponseEntity<ResponseDTO> addPetToBeginning(@Valid @RequestBody PetDTO petDTO) throws ListDEException {
-        if (listDEService.verifyId(petDTO) == 0) {
+        try{
             Location location = locationService.getLocationByCode(petDTO.getCodeLocation());
             if (location == null) {
                 return new ResponseEntity<>(new ResponseDTO(
@@ -84,17 +83,14 @@ public class ListDEController {
             return new ResponseEntity<>(new ResponseDTO(
                     200, "Se ha adicionado el petacón",
                     null), HttpStatus.OK);
-        } else {
-            List<ErrorDTO> errorDTOS = new ArrayList<>();
-            ErrorDTO errorDTO = new ErrorDTO(400, "digite una mascota con un id distinto");
-            errorDTOS.add(errorDTO);
-            return new ResponseEntity<>(new ResponseDTO(400, "Ya existe una mascota con ese id", errorDTOS), HttpStatus.BAD_REQUEST);
+        } catch (ListDEException e){
+            throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping(path = "/add_pet_in_pos/{pos}")
     public ResponseEntity<ResponseDTO> addPetInPos(@Valid @RequestBody PetDTO petDTO, @Min(0) @PathVariable int pos) {
-        if (listDEService.verifyId(petDTO) == 0) {
+        try{
             Location location = locationService.getLocationByCode(petDTO.getCodeLocation());
             if (location == null) {
                 return new ResponseEntity<>(new ResponseDTO(
@@ -108,13 +104,11 @@ public class ListDEController {
             return new ResponseEntity<>(new ResponseDTO(
                     200, "Se ha adicionado el petacón",
                     null), HttpStatus.OK);
-        } else {
-            List<ErrorDTO> errorDTOS = new ArrayList<>();
-            ErrorDTO errorDTO = new ErrorDTO(400, "digite una mascota con un id distinto");
-            errorDTOS.add(errorDTO);
-            return new ResponseEntity<>(new ResponseDTO(400, "Ya existe una mascota con ese id", errorDTOS), HttpStatus.BAD_REQUEST);
+        } catch (ListDEException e){
+            throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
 
 
     @GetMapping(path = "/pets_by_locations/{age}")

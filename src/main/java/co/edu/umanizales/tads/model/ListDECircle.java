@@ -1,12 +1,9 @@
 package co.edu.umanizales.tads.model;
 
 import co.edu.umanizales.tads.exception.ListDEException;
-import com.google.gson.Gson;
 import lombok.Data;
-import javax.json.Json;
-import javax.json.JsonObject;
+
 import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class ListDECircle {
@@ -70,7 +67,7 @@ public class ListDECircle {
         NodeDE newNode = new NodeDE(pet);
         if (this.head != null) {
             NodeDE temp = this.head;
-            while (temp.getNext() != null) {
+            while (temp.getNext() != head) {
                 if (temp.getData().getIdentification().equals(pet.getIdentification())) {
                     throw new ListDEException("400", "Ya existe una mascota con ese codigo");
                 }
@@ -89,6 +86,7 @@ public class ListDECircle {
         }
         size++;
     }
+
     /*
     metodo agregar en posicion
     se crea el ayudante y se crea un nuevo nodo donde va a ir la mascota
@@ -121,7 +119,8 @@ public class ListDECircle {
         }
         if (pos2 == 0) {
             addPetToBeginning(pet);
-        }if (pos2>0) {
+        }
+        if (pos2 > 0) {
             for (int i = 1; i < pos2; i++) {
                 temp = temp.getNext();
             }
@@ -129,9 +128,9 @@ public class ListDECircle {
             newNode.setNext(temp.getNext());
             temp.getNext().setPrevious(newNode);
             temp.setNext(newNode);
-        }else if(pos2<0){
-            int pos = pos2 *(-1);
-            for (int i = 1; i < pos2;i++){
+        } else if (pos2 < 0) {
+            int pos = pos2 * (-1);
+            for (int i = 1; i < pos2; i++) {
                 temp = temp.getPrevious();
             }
             newNode.setPrevious(temp.getPrevious());
@@ -142,31 +141,75 @@ public class ListDECircle {
         size++;
 
     }
+
     /*
     method to show the listDE
-    voy a retornar la lista en tipo json para asi mostrar los datos estructurados.
-    creo una lista para guardar la data de cada mascota
-    creo un ayudante y lo posiciono en la cabeza.
-    recorro la lista agregando la data de los objetos a la lista mientras que el ayudante no este parado en la cabeza
-    que es el ultimo dato.
-    uso la libreria Gson para transformar de lista a json todos los datos obtenidos.
-    creo un objeto de tipo jsonObject para retornarlo de esa manera con ayuda de varias funciones.
+    creo un metodo que me retorne una lista que tenga por dentro datos de tipo pet
+    creo una lista con datos de tipo pet
+    si hay datos
+    llamo a un ayudante y lo posiciono en la cabeza
+    añado los datos de cada una de las mascotas mientras no se llegue al primer y ultimo dato de la lita que es la cabeza
+    retorno la lista pets
      */
-    public JsonObject showList() {
-        List<Object> data = new ArrayList<>();
-        NodeDE temp = this.head;
-        while (temp != this.head) {
-            data.add(temp.getData());
-            temp = temp.getNext();
-        }
+    public ArrayList<Pet> showList() {
+        ArrayList<Pet> pets = new ArrayList<>();
+        if (this.head != null) {
+            NodeDE temp = this.head;
 
-        Gson gson = new Gson();
-        String json = gson.toJson(data);
-        JsonObject jsonObject = Json.createObjectBuilder()
-                .add("data", json)
-                .build();
-        return jsonObject;
+            do {
+                pets.add(temp.getData());
+                temp = temp.getNext();
+            } while (temp != this.head);
+        }
+        return pets;
+
     }
+    /*
+    method to clean the pets
+    si no hay datos retorne que no hay datos
+    si hay datos cree una variable de tipo entero que tenga números de 0 a 1000
+    cree un ayudante en cabeza
+    si la direccion que da el usuario es i entonces itere por la izquierda hasta que llegue a el valor de el aleatorio
+    pregunte si esa mascota donde está parado el ayudante ya está bañada, si lo está entonces retorne una excepción
+    , si no lo está entonces digale que se bañe y retorne
+    -----------------------------------------------------------------------------------------------------------------------
+    si la direccion del usuario es d entonces itere por la derecha hasta llegar a el valor de el aleatorio, pregunte si
+    esa mascota donde está parado el ayudante ya está bañada, si lo está entonces mande una excepcion.
+    si no lo está entonces digale que se bañe y retorne.
+    --------------------------------------------------------------------------------------------------------------------
+    si el usuario metio mal los datos de la direccion ,mandele entonces una excepcion.
+     */
+    public void cleanPet(char direction) {
+        if (this.head != null) {
+            int val = (int) Math.floor(Math.random() * 1000);
+            NodeDE temp = this.head;
+            if (direction == 'i' || direction == 'I') {
+                for (int i = 0; i < val; i++) {
+                    temp = temp.getPrevious();
+                }
+                if (temp.getData().isShower() == true) {
+                    throw new ListDEException("400", "La mascota ya está bañada");
+                } else {
+                    temp.getData().setShower(true);
+                    return;
+                }
+            } else if (direction == 'd' || direction == 'D') {
+                for (int i = 0; i < val; i++) {
+                    temp = temp.getNext();
+                }
+                if (temp.getData().isShower() == true) {
+                    throw new ListDEException("400", "La mascota ya está bañada");
+                } else {
+                    temp.getData().setShower(true);
+                    return;
+                }
+            }else{
+                throw new ListDEException("400","Envió mal la variable de dirección");
+            }
+        }
+        throw new ListDEException("404","la lista está vacía");
+    }
+
 
 
 }

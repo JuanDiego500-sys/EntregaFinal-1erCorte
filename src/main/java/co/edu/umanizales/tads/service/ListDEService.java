@@ -8,6 +8,8 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 import co.edu.umanizales.tads.exception.ListDEException;
 
+import java.util.ArrayList;
+
 @Service
 @Data
 public class ListDEService {
@@ -22,8 +24,8 @@ public class ListDEService {
         return pets.getHead();
     }
 
-    public String putToString() {
-        return pets.toListString();
+    public ArrayList<Pet> showList() {
+        return pets.showList();
     }
 
     public void addPet(Pet pet) throws ListDEException {

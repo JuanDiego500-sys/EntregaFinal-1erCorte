@@ -4,6 +4,8 @@ import co.edu.umanizales.tads.controller.dto.PetDTO;
 import co.edu.umanizales.tads.exception.ListDEException;
 import lombok.Data;
 
+import java.util.ArrayList;
+
 @Data
 public class ListDE {
     private NodeDE head;
@@ -496,19 +498,17 @@ y diciendole que su next es ahora nulo.
         }
     }
 
-    public String toListString() {
-        StringBuilder sb = new StringBuilder();
-        NodeDE temp = this.head;
-        sb.append("[");
-        while (temp != null) {
-            sb.append(temp.getData().toString());
-            temp = temp.getNext();
-            if (temp != null) {
-                sb.append(", ");
-            }
+    public ArrayList<Pet> showList() {
+        ArrayList<Pet> pets = new ArrayList<>();
+        if (this.head != null) {
+            NodeDE temp = this.head;
+
+            do {
+                pets.add(temp.getData());
+                temp = temp.getNext();
+            } while (temp != null);
         }
-        sb.append("]");
-        return sb.toString();
+        return pets;
 
     }
 
