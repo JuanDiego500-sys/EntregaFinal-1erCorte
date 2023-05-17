@@ -1,6 +1,5 @@
 package co.edu.umanizales.tads.model;
 
-import co.edu.umanizales.tads.controller.dto.KidDTO;
 import co.edu.umanizales.tads.exception.ListSEException;
 import lombok.Data;
 
@@ -59,20 +58,23 @@ public class ListSE {
     public void addInPos(Kid kid, int pos) throws ListSEException {
         Node temp = head;
         Node newNode = new Node(kid);
-        int listLength = getLength();
-        if (pos < 0 || pos >= listLength)//to do a validation and add the kid in the last position
-            add(kid);
-        if (pos == 0) {
-            newNode.setNext(head);//to actualize the head
-            head = newNode;
-
-        } else {
-            for (int i = 0; temp.getNext() != null && i < pos - 1; i++) {
-                temp = temp.getNext();
+        if (this.head != null) {
+            if (verifyId(kid)==0) {
+                if (pos > size) {
+                    add(kid);
+                } else if (pos < 0) {
+                    addToStart(kid);
+                } else {
+                    for (int i = 0; temp.getNext() != null && i < pos; i++) {
+                        temp = temp.getNext();
+                    }
+                    temp.setNext(newNode);
+                }
+                size++;
+            }else {
+                throw new ListSEException("400","ya existe el niño");
             }
-            temp.setNext(newNode);
         }
-        size++;
     }
 
     //method to delete a kid receiving his id
@@ -393,7 +395,7 @@ public class ListSE {
     }
 
     //method to verify the id to don't add kids with the same id-----------------------------------------------------
-    public int verifyId(KidDTO kid) {
+    public int verifyId(Kid kid) {
         Node temp = this.head;
         boolean found = false;
         while (temp != null) {

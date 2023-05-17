@@ -1,12 +1,11 @@
 package co.edu.umanizales.tads.service;
 
-import co.edu.umanizales.tads.controller.dto.PetDTO;
+import co.edu.umanizales.tads.exception.ListDEException;
 import co.edu.umanizales.tads.model.ListDE;
 import co.edu.umanizales.tads.model.NodeDE;
 import co.edu.umanizales.tads.model.Pet;
 import lombok.Data;
 import org.springframework.stereotype.Service;
-import co.edu.umanizales.tads.exception.ListDEException;
 
 import java.util.ArrayList;
 
@@ -96,9 +95,6 @@ public class ListDEService {
         return pets.generateReportByAge();
     }
 
-    public int verifyId(PetDTO petDTO) throws ListDEException {
-        return pets.verifyId(petDTO);
-    }
 
     public void deleteKamikazePet(String id) throws ListDEException {
         pets.deleteKamikazePet(id);

@@ -1,6 +1,5 @@
 package co.edu.umanizales.tads.model;
 
-import co.edu.umanizales.tads.controller.dto.PetDTO;
 import co.edu.umanizales.tads.exception.ListDEException;
 import lombok.Data;
 
@@ -77,31 +76,26 @@ public class ListDE {
         size--;
     }
 
-    public void addInPos(Pet pet, int pos2) {
-        NodeDE temp = head;
+    public void addInPos(Pet pet, int pos2) throws ListDEException {
+        NodeDE temp = this.head;
         NodeDE newNode = new NodeDE(pet);
-        if (this.head == null) {
-            addPet(pet);
-            return;
+        if (this.head != null) {
+            if (verifyId(pet) == 0) {
+                    if (pos2 > size) {
+                        addPet(pet);
+                    } else if (pos2 < 0) {
+                        addPetToBeginning(pet);
+                    } else {
+                        for (int i = 0; temp.getNext() != null && i < pos2; i++) {
+                            temp = temp.getNext();
+                        }
+                        temp.setNext(newNode);
+                    }
+                    size++;
+            } else {
+                throw new ListDEException("400","ya existe la mascota");
+            }
         }
-
-        if (pos2 >= size)//to do a validation and add the kid in the last position
-            addPet(pet);
-        if (pos2 == 0) {
-            addPetToBeginning(pet);
-
-        }
-        for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
-            temp = temp.getNext();
-        }
-        newNode.setNext(temp.getNext());
-        temp.setNext(newNode);
-
-        if (newNode.getNext() != null) {
-            newNode.getNext().setPrevious(newNode);
-        }
-        newNode.setPrevious(temp);
-        size++;
 
     }
 
@@ -157,88 +151,43 @@ public class ListDE {
     public void orderByGender() throws ListDEException {
         ListDE listDE1 = new ListDE();
         int sum = 0;
-        NodeDE temp = head;
-        if (head == null) {
-            throw new ListDEException("400", "No hay mascotas en la lista");
-        } else {
-            boolean hasFemale = false;
-            boolean hasMale = false;
-            while (temp != null) {
-                if (temp.getData().getGender() == 'F') {
-                    listDE1.addPetToBeginning(temp.getData());
-                    hasFemale = true;
-                } else {
-                    hasMale = true;
-                }
-                temp = temp.getNext();
-            }
-            if (!hasFemale || !hasMale) {
-                throw new ListDEException("400", "La lista debe contener al menos una mascota de cada género");
-            }
-            temp = head;
-            sum = listDE1.getSize();
+        if (this.head != null) {
+            NodeDE temp = this.head;
+            sum = 0;
             while (temp != null) {
                 if (temp.getData().getGender() == 'M') {
                     listDE1.addInPos(temp.getData(), sum);
                     temp = temp.getNext();
                     sum = sum + 2;
                 } else {
-                    temp = temp.getNext();
+                    listDE1.addPet(temp.getData());
                 }
             }
             this.head = listDE1.getHead();
         }
     }
 
-    public void losePositions(String id, int lose) {
+
+    public void losePositions(String id, int lose) throws ListDEException{
         NodeDE temp = head;
         int sum = 0;
         ListDE listDE1 = new ListDE();
-        boolean found = false;
-        boolean added = false; // bandera para verificar si la mascota ya ha sido agregada a listDE1
-        while (temp != null) {
-            if (temp.getData().getIdentification().equals(id)) {
-                if (added) {
-                    // Si la mascota ya ha sido agregada a listDE1, no la agregues de nuevo.
+        if (head != null) {
+            while (temp != null) {
+                if (!temp.getData().getIdentification().equals(id)) {
                     listDE1.addPet(temp.getData());
+                    temp = temp.getNext();
                 } else {
-                    // Agrega la mascota a listDE1 y marca la bandera added como verdadera.
-                    listDE1.addPet(temp.getData());
-                    added = true;
+                    temp = temp.getNext();
                 }
-                found = true;
-            } else {
-                listDE1.addPet(temp.getData());
             }
-            temp = temp.getNext();
-        }
-        if (!found) {
-            throw new ListDEException("400", "El id buscado no se encuentra en la lista");
+        } else {
+            throw new ListDEException("404", "no hay datos en la lista");
         }
         sum = lose + getPosById(id);
-        if (sum > size) {
-            addPet(getPetById(id));
-        } else {
-            if (!listDE1.getPetByPos(sum).getIdentification().equals(id)) {
-                listDE1.addInPos(getPetById(id), sum);
-            }
-            this.head = listDE1.getHead();
-        }
+        listDE1.addInPos(getPetById(id), sum);
+        this.head = listDE1.getHead();
     }
-
-    public Pet getPetByPos(int pos) {
-        if (pos < 0 || pos >= size) {
-            return null;
-        } else {
-            NodeDE temp = head;
-            for (int i = 0; i < pos; i++) {
-                temp = temp.getNext();
-            }
-            return temp.getData();
-        }
-    }
-
-
     public int getPosById(String id) {
         NodeDE temp = this.head;
         int acum = 0;
@@ -263,7 +212,7 @@ public class ListDE {
             }
         }
         Pet pet = new Pet(temp.getData().getAge(), temp.getData().getName(),
-                temp.getData().getType(), temp.getData().getRace(), temp.getData().getGender(), temp.getData().getIdentification(), temp.getData().getLocation(),temp.getData().isShower());
+                temp.getData().getType(), temp.getData().getRace(), temp.getData().getGender(), temp.getData().getIdentification(), temp.getData().getLocation(), temp.getData().isShower());
         return pet;
     }
 
@@ -436,11 +385,11 @@ public class ListDE {
                 " mascotas entre 13-15 años:" + quantity5;
     }
 
-    public int verifyId(PetDTO petDTO) {
+    public int verifyId(Pet pet) {
         NodeDE temp = this.head;
         boolean found = false;
         while (temp != null) {
-            if (temp.getData().getIdentification().equals(petDTO.getIdentification())) {
+            if (temp.getData().getIdentification().equals(pet.getIdentification())) {
                 found = true;
                 break;
             }

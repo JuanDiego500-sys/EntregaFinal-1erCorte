@@ -87,24 +87,23 @@ public class ListDEController {
             throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-
     @PostMapping(path = "/add_pet_in_pos/{pos}")
-    public ResponseEntity<ResponseDTO> addPetInPos(@Valid @RequestBody PetDTO petDTO, @Min(0) @PathVariable int pos) {
-        try{
+    public ResponseEntity<ResponseDTO> addPetInPos(@Valid @RequestBody PetDTO petDTO,@Min (0)@PathVariable int pos) {
+        try {
             Location location = locationService.getLocationByCode(petDTO.getCodeLocation());
             if (location == null) {
                 return new ResponseEntity<>(new ResponseDTO(
                         404, "La ubicación no existe",
-                        null), HttpStatus.BAD_REQUEST);
+                        null), HttpStatus.OK);
             }
             listDEService.addInPos(
                     new Pet(petDTO.getAge(),
                             petDTO.getName(), petDTO.getType(), petDTO.getRace(),
-                            petDTO.getGender(), petDTO.getIdentification(), location,petDTO.isShower()), pos);
+                            petDTO.getGender(), petDTO.getIdentification(), location, petDTO.isShower()), pos);
             return new ResponseEntity<>(new ResponseDTO(
                     200, "Se ha adicionado el petacón",
                     null), HttpStatus.OK);
-        } catch (ListDEException e){
+        }catch(ListDEException e){
             throw new RequestException(e.getCode(),e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
@@ -248,7 +247,7 @@ public class ListDEController {
     }
 
     @GetMapping(path = "/male_to_beginning")
-    public ResponseEntity<ResponseDTO> putKidsToBeginning() throws ListDEException {
+            public ResponseEntity<ResponseDTO> putKidsToBeginning() throws ListDEException {
         try {
             listDEService.putPetsMaleToBeginning();
             return new ResponseEntity<>(new ResponseDTO(
