@@ -59,7 +59,7 @@ public class ListSE {
         Node temp = head;
         Node newNode = new Node(kid);
         if (this.head != null) {
-            if (verifyId(kid)==0) {
+            if (verifyId(kid) == 0) {
                 if (pos > size) {
                     add(kid);
                 } else if (pos < 0) {
@@ -71,8 +71,8 @@ public class ListSE {
                     temp.setNext(newNode);
                 }
                 size++;
-            }else {
-                throw new ListSEException("400","ya existe el niño");
+            } else {
+                throw new ListSEException("400", "ya existe el niño");
             }
         }
     }
@@ -193,13 +193,18 @@ public class ListSE {
     public Kid getKidById(String id) {
         Node temp = head;
         if (head != null) {
-            while (temp != null && !temp.getData().getIdentification().equals(id)) {
-                temp = temp.getNext();
+            while (temp != null) {
+                if (!temp.getData().getIdentification().equals(id)) {
+                    temp = temp.getNext();
+                } else {
+                    Kid kid = new Kid(temp.getData().getIdentification(), temp.getData().getName(),
+                            temp.getData().getAge(), temp.getData().getGender(), temp.getData().getLocation());
+                    return kid;
+                }
             }
+
         }
-        Kid kid = new Kid(temp.getData().getIdentification(), temp.getData().getName(),
-                temp.getData().getAge(), temp.getData().getGender(), temp.getData().getLocation());
-        return kid;
+        return null;
     }
 
 
