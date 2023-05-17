@@ -59,23 +59,22 @@ public class ListSE {
         Node temp = head;
         Node newNode = new Node(kid);
         if (this.head != null) {
-            if (verifyId(kid) == 0) {
+            if (verifyId(kid)==0){
                 if (pos > size) {
                     add(kid);
-                } else if (pos < 0) {
+                } else if (pos < 0 || pos==0) {
                     addToStart(kid);
                 } else {
-                    for (int i = 0; temp.getNext() != null && i < pos; i++) {
+                    for (int i = 0; i < pos - 1 && temp.getNext() != null; i++) {
                         temp = temp.getNext();
                     }
+                    newNode.setNext(temp.getNext());
                     temp.setNext(newNode);
                 }
-                size++;
-            } else {
-                throw new ListSEException("400", "ya existe el niño");
+                }
             }
         }
-    }
+
 
     //method to delete a kid receiving his id
     public void deleteKid(String id) throws ListSEException {
@@ -101,7 +100,6 @@ public class ListSE {
     //method to order by gender-------------------------------------------------------------------------------------
     public void orderByGender() throws ListSEException {
         ListSE listSE1 = new ListSE();
-
         int sum = 0;
         Node temp = head;
         if (head == null) {

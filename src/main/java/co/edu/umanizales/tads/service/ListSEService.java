@@ -1,10 +1,9 @@
 package co.edu.umanizales.tads.service;
 
-import co.edu.umanizales.tads.controller.dto.KidDTO;
+import co.edu.umanizales.tads.exception.ListSEException;
 import co.edu.umanizales.tads.model.Kid;
 import co.edu.umanizales.tads.model.ListSE;
 import co.edu.umanizales.tads.model.Node;
-import co.edu.umanizales.tads.exception.ListSEException;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -84,7 +83,7 @@ public class ListSEService {
         return kids.getCountKidsByLocationCode(code);
     }
 
-    public int verifyId(KidDTO kid) {
+    public int verifyId(Kid kid) {
         return kids.verifyId(kid);
     }
 
