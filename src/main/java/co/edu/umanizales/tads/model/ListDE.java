@@ -1,6 +1,7 @@
 package co.edu.umanizales.tads.model;
 
 import co.edu.umanizales.tads.exception.ListDEException;
+import co.edu.umanizales.tads.exception.ListSEException;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -81,19 +82,23 @@ public class ListDE {
         NodeDE newNode = new NodeDE(pet);
         if (this.head != null) {
             if (verifyId(pet) == 0) {
-                    if (pos2 > size) {
-                        addPet(pet);
-                    } else if (pos2 < 0) {
-                        addPetToBeginning(pet);
-                    } else {
-                        for (int i = 0; temp.getNext() != null && i < pos2; i++) {
-                            temp = temp.getNext();
-                        }
-                        temp.setNext(newNode);
+                if (pos2 > size) {
+                    addPet(pet);
+                } else if (pos2 < 0 || pos2 == 0) {
+                    addPetToBeginning(pet);
+                } else {
+                    for (int i = 0; i < pos2 - 1 && temp.getNext() != null; i++) {
+                        temp = temp.getNext();
                     }
-                    size++;
+
+                    temp.getNext().setPrevious(newNode);
+                    newNode.setNext(temp.getNext());
+                    temp.setNext(newNode);
+                    newNode.setPrevious(temp);
+
+                }
             } else {
-                throw new ListDEException("400","ya existe la mascota");
+                throw new ListDEException("400", "ya existe la mascota");
             }
         }
 
@@ -151,16 +156,26 @@ public class ListDE {
     public void orderByGender() throws ListDEException {
         ListDE listDE1 = new ListDE();
         int sum = 0;
-        if (this.head != null) {
-            NodeDE temp = this.head;
-            sum = 0;
+        NodeDE temp = this.head;
+        if (head == null) {
+            throw new ListSEException("404", "no hay datos en la lista");
+        } else {
+            while (temp != null) {
+                if (temp.getData().getGender() == 'F') {
+                    listDE1.addPetToBeginning(temp.getData());
+
+                }
+                temp = temp.getNext();
+            }
+            temp = head;
             while (temp != null) {
                 if (temp.getData().getGender() == 'M') {
                     listDE1.addInPos(temp.getData(), sum);
                     temp = temp.getNext();
                     sum = sum + 2;
                 } else {
-                    listDE1.addPet(temp.getData());
+                    temp = temp.getNext();
+
                 }
             }
             this.head = listDE1.getHead();
@@ -168,7 +183,7 @@ public class ListDE {
     }
 
 
-    public void losePositions(String id, int lose) throws ListDEException{
+    public void losePositions(String id, int lose) throws ListDEException {
         NodeDE temp = head;
         int sum = 0;
         ListDE listDE1 = new ListDE();
@@ -188,6 +203,7 @@ public class ListDE {
         listDE1.addInPos(getPetById(id), sum);
         this.head = listDE1.getHead();
     }
+
     public int getPosById(String id) {
         NodeDE temp = this.head;
         int acum = 0;
